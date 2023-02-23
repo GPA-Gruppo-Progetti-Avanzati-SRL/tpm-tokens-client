@@ -1,4 +1,4 @@
-module github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-model
+module github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client
 
 go 1.19
 

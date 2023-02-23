@@ -4,7 +4,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing/filetracer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
-	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-model/tokensclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"

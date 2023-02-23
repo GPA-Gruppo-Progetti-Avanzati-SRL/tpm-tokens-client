@@ -1,6 +1,6 @@
 package tokensclient_test
 
-import "github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-model/tokensclient"
+import "github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 
 // This file is being separated from the actual tests because in the current state of affairs it has to be aligned with the tokensazstore package one and the client one.
 // easier to copy a file and change package instead of copying and pasting
