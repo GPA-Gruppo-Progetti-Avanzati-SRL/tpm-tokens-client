@@ -1,4 +1,4 @@
-package actions
+package actionsclient
 
 import (
 	"encoding/json"
