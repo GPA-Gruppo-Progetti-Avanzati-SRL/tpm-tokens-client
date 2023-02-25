@@ -18,6 +18,8 @@ const (
 	EventTypeExpiration EventType = "expired"
 )
 
+var NilTokenId TokenId = TokenId{}
+
 type TokenId struct {
 	CampaignId string
 	TokenId    string
@@ -84,6 +86,15 @@ func DeserializeToken(b []byte) (*Token, error) {
 	}
 
 	return &tok, nil
+}
+
+func (tok *Token) TokenId() (TokenId, error) {
+	tid, ok := ParseTokenId(tok.Id)
+	if !ok {
+		return tid, fmt.Errorf("cannot parse %s", tok.Id)
+	}
+
+	return tid, nil
 }
 
 func (tok *Token) ToJSON() ([]byte, error) {

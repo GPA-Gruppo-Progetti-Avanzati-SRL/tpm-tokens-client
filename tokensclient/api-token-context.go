@@ -26,7 +26,7 @@ func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*T
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
 		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
-	c.harEntries = append(c.harEntries, harEntry)
+	// c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
@@ -67,7 +67,7 @@ func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContex
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
 		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
-	c.harEntries = append(c.harEntries, harEntry)
+	// c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
@@ -108,7 +108,7 @@ func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenCo
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
 		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
-	c.harEntries = append(c.harEntries, harEntry)
+	// c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
@@ -133,7 +133,7 @@ func (c *Client) DeleteTokenContext(reqCtx ApiRequestContext, ctxId string) (boo
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
 		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
-	c.harEntries = append(c.harEntries, harEntry)
+	// c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return false, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}

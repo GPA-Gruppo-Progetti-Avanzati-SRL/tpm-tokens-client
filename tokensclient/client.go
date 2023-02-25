@@ -18,9 +18,9 @@ const (
 )
 
 type Client struct {
-	host       HostInfo
-	client     *restclient.Client
-	harEntries []*har.Entry
+	host   HostInfo
+	client *restclient.Client
+	// harEntries []*har.Entry
 }
 
 func (c *Client) Close() {
