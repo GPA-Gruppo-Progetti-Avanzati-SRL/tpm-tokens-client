@@ -149,11 +149,9 @@ func (ctx *TokenContext) EvaluateInActions(tok *Token, params map[string]interfa
 	}
 
 	// Should check if token is in pending state?
-	var lastEvt Event
 	var eOpts []expression.Option
 	if state != StartEndState {
-		lastEvt = tok.Events[len(tok.Events)-1]
-		eOpts = []expression.Option{expression.WithVars(lastEvt.Vars), expression.WithMapInput(params)}
+		eOpts = []expression.Option{expression.WithVars(tok.Vars()), expression.WithMapInput(params)}
 	} else {
 		eOpts = []expression.Option{expression.WithMapInput(params)}
 	}

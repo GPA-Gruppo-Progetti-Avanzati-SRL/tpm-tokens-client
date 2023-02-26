@@ -38,15 +38,18 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 					{
 						To:          "generated",
 						Description: "il codice e' stato creato correttamente",
-						Rules: []tokensclient.Rule{
+						Properties: []tokensclient.Property{
 							{
-								Expression: "\"{$.ssn}\" != \"\"",
+								Name:           "ssn",
+								ValidationRule: "required",
 							},
 							{
-								Expression: "\"{$.channel}\" != \"\"",
+								Name:           "channel",
+								ValidationRule: "required",
 							},
 							{
-								Expression: "\"{$.product}\" != \"\"",
+								Name:           "product",
+								ValidationRule: "required",
 							},
 						},
 						ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
@@ -102,6 +105,20 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 					{
 						To:          "valid-1",
 						Description: "il codice e' stato usato ed in corso di validazione",
+						Properties: []tokensclient.Property{
+							{
+								Name:           "ssn",
+								ValidationRule: "required",
+							},
+							{
+								Name:           "channel",
+								ValidationRule: "required",
+							},
+							{
+								Name:           "product",
+								ValidationRule: "required",
+							},
+						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.ssn}\" == \"{v:ssn1}\" && \"{$.channel}\" == \"{v:channel}\" && \"{$.product}\" == \"{v:product}\"",
@@ -122,6 +139,12 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				OutTransitions: []tokensclient.Transition{
 					{
 						To: "active",
+						Properties: []tokensclient.Property{
+							{
+								Name:           "result",
+								ValidationRule: "required",
+							},
+						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.result}\" == \"OK\"",
@@ -130,6 +153,12 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 					},
 					{
 						To: "generated",
+						Properties: []tokensclient.Property{
+							{
+								Name:           "result",
+								ValidationRule: "required",
+							},
+						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.result}\" == \"KO\"",
@@ -146,6 +175,20 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				OutTransitions: []tokensclient.Transition{
 					{
 						To: "valid-2",
+						Properties: []tokensclient.Property{
+							{
+								Name:           "ssn",
+								ValidationRule: "required",
+							},
+							{
+								Name:           "channel",
+								ValidationRule: "required",
+							},
+							{
+								Name:           "product",
+								ValidationRule: "required",
+							},
+						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.ssn}\" != \"{v:ssn}\" && \"{$.channel}\" == \"UP\"",
@@ -162,6 +205,12 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				OutTransitions: []tokensclient.Transition{
 					{
 						To: "consumed",
+						Properties: []tokensclient.Property{
+							{
+								Name:           "result",
+								ValidationRule: "required",
+							},
+						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.result}\" == \"OK\"",

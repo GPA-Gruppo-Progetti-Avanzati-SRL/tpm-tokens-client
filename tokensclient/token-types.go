@@ -48,7 +48,7 @@ func ParseTokenId(c string) (TokenId, bool) {
 }
 
 type TokenIdProvider interface {
-	NewId(ctxId string, unique bool, action *Action) (string, error)
+	NewId(ctxId string, unique bool, action map[string]interface{}) (string, error)
 }
 
 type State struct {

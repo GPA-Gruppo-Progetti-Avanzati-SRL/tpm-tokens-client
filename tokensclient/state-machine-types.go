@@ -63,9 +63,16 @@ type Rule struct {
 	Expression string `yaml:"expr,omitempty" mapstructure:"expr,omitempty" json:"expr,omitempty"`
 }
 
+type Property struct {
+	Name           string `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	ValidationRule string `yaml:"validation-rule,omitempty" mapstructure:"validation-rule,omitempty" json:"validation-rule,omitempty"`
+	Help           string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+}
+
 type Transition struct {
 	To                    string                 `yaml:"to,omitempty" mapstructure:"to,omitempty" json:"to,omitempty"`
 	Order                 int                    `yaml:"order,omitempty" mapstructure:"order,omitempty" json:"order,omitempty"`
+	Properties            []Property             `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	Rules                 []Rule                 `yaml:"rules,omitempty" mapstructure:"rules,omitempty" json:"rules,omitempty"`
 	ProcessVarDefinitions []ProcessVarDefinition `yaml:"process-vars,omitempty" mapstructure:"process-vars,omitempty" json:"process-vars,omitempty"`
 	TTL                   TTLDefinition          `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
