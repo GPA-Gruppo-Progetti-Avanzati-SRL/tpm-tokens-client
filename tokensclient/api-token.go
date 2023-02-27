@@ -12,8 +12,9 @@ import (
 )
 
 type TokenApiRequest struct {
-	TokenId    string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
-	CustomData map[string]interface{} `yaml:"custom-data,omitempty" mapstructure:"custom-data,omitempty" json:"custom-data,omitempty"`
+	TokenId       string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
+	CustomData    map[string]interface{} `yaml:"custom-data,omitempty" mapstructure:"custom-data,omitempty" json:"custom-data,omitempty"`
+	CheckOnlyFLag bool                   `yaml:"check-only,omitempty" mapstructure:"check-only,omitempty" json:"check-only,omitempty"`
 }
 
 func (tok *TokenApiRequest) ToJSON() ([]byte, error) {
@@ -48,7 +49,11 @@ func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) 
 func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenApiRequest, ct string) (*Token, error) {
 	const semLogContext = "tpm-tokens::new-token"
 
-	ep := c.tokenApiUrl(NewToken, ctxId, "", nil)
+	op := "use"
+	if token.CheckOnlyFLag {
+		op = "check"
+	}
+	ep := c.tokenApiUrl(NewToken, ctxId, "", []har.NameValuePair{{Name: "op", Value: op}})
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
