@@ -16,11 +16,11 @@ const (
 	EventTypeExpiration EventType = "expired"
 )
 
-var NilTokenId TokenId = ""
-
-type TokenId string
+var NilTokenId = ""
 
 /*
+type TokenId string
+
 func (t TokenId) String() string {
 	return fmt.Sprintf("%s:%s:%s", t.CampaignId, t.TokenId, t.CheckDigit)
 }
@@ -74,6 +74,7 @@ type Event struct {
 type Token struct {
 	Pkey     string                 `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
 	Id       string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	CtxId    string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
 	Events   []Event                `yaml:"events,omitempty" mapstructure:"events,omitempty" json:"events,omitempty"`
 	Metadata map[string]interface{} `yaml:"metadata,omitempty" mapstructure:"metadata,omitempty" json:"metadata,omitempty"`
 }
@@ -88,8 +89,8 @@ func DeserializeToken(b []byte) (*Token, error) {
 	return &tok, nil
 }
 
-func (tok *Token) TokenId() (TokenId, error) {
-	return TokenId(tok.Id), nil
+func (tok *Token) TokenId() (string, error) {
+	return tok.Id, nil
 
 	/*
 		tid, ok := ParseTokenId(tok.Id)
