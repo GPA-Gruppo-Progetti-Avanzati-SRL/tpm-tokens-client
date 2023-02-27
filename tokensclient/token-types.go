@@ -2,9 +2,7 @@ package tokensclient
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/rs/zerolog/log"
-	"regexp"
 	"time"
 )
 
@@ -18,23 +16,24 @@ const (
 	EventTypeExpiration EventType = "expired"
 )
 
-var NilTokenId TokenId = TokenId{}
+var NilTokenId TokenId = ""
 
-type TokenId struct {
-	CampaignId string
-	TokenId    string
-	CheckDigit string
-}
+type TokenId string
 
+/*
 func (t TokenId) String() string {
 	return fmt.Sprintf("%s:%s:%s", t.CampaignId, t.TokenId, t.CheckDigit)
 }
+*/
 
-var TokenPatternRegexp = regexp.MustCompile("^([a-zA-Z]{6})\\:([a-zA-Z0-9]{1,16})\\:([a-zA-Z0-9])$")
+// var TokenPatternRegexp = regexp.MustCompile("^([a-zA-Z]{6})\\:([a-zA-Z0-9]{1,16})\\:([a-zA-Z0-9])$")
+
+/*
+var TokenPatternRegExp = regexp.MustCompile("^([a-zA-Z]{6})([a-zA-Z0-9]{16})([a-zA-Z0-9])$")
 
 func ParseTokenId(c string) (TokenId, bool) {
 
-	matches := TokenPatternRegexp.FindAllSubmatch([]byte(c), -1)
+	matches := TokenPatternRegExp.FindAllSubmatch([]byte(c), -1)
 	if len(matches) > 0 {
 		t := TokenId{
 			CampaignId: string(matches[0][1]),
@@ -46,6 +45,7 @@ func ParseTokenId(c string) (TokenId, bool) {
 
 	return TokenId{}, false
 }
+*/
 
 type TokenIdProvider interface {
 	NewId(ctxId string, unique bool, action map[string]interface{}) (string, error)
@@ -89,12 +89,16 @@ func DeserializeToken(b []byte) (*Token, error) {
 }
 
 func (tok *Token) TokenId() (TokenId, error) {
-	tid, ok := ParseTokenId(tok.Id)
-	if !ok {
-		return tid, fmt.Errorf("cannot parse %s", tok.Id)
-	}
+	return TokenId(tok.Id), nil
 
-	return tid, nil
+	/*
+		tid, ok := ParseTokenId(tok.Id)
+		if !ok {
+			return tid, fmt.Errorf("cannot parse %s", tok.Id)
+		}
+
+		return tid, nil
+	*/
 }
 
 func (tok *Token) ToJSON() ([]byte, error) {
