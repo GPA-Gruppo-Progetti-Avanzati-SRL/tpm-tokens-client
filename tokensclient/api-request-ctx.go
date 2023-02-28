@@ -29,7 +29,7 @@ func ApiRequestWithRequestId(reqId string) APIRequestContextOption {
 	return func(ctx *ApiRequestContext) {
 		if reqId == "" {
 			reqId = util.NewObjectId().String()
-			log.Warn().Msg(semLogContext + " reqId set to empty string.... auto generated")
+			log.Info().Msg(semLogContext + " reqId set to empty string.... auto generated")
 		}
 		ctx.RequestId = reqId
 	}
@@ -40,7 +40,7 @@ func ApiRequestWithApiKey(apiKey string) APIRequestContextOption {
 	return func(ctx *ApiRequestContext) {
 		if apiKey == "" {
 			apiKey = util.NewObjectId().String()
-			log.Warn().Msg(semLogContext + " apiKey set to empty string.... auto generated")
+			log.Info().Msg(semLogContext + " apiKey set to empty string.... auto generated")
 		}
 		ctx.XAPIKey = apiKey
 	}
@@ -53,10 +53,10 @@ func ApiRequestWithAutoLraId() APIRequestContextOption {
 }
 
 func ApiRequestWithLraId(lraId string) APIRequestContextOption {
-	const semLogContext = "tokens-client::request-with-lar-id"
+	const semLogContext = "tokens-client::request-with-lra-id"
 	return func(ctx *ApiRequestContext) {
 		if lraId == "" {
-			log.Warn().Msg(semLogContext + " lraId set to empty string.... no lraId set")
+			log.Info().Msg(semLogContext + " lraId set to empty string.... no lraId set")
 		}
 		ctx.LRAId = lraId
 	}
