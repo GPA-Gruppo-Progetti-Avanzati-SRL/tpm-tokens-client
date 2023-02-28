@@ -25,7 +25,7 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				Help:        "help of [*] state",
 				Actions: []tokensclient.ActionDefinition{
 					{
-						ActionId:   "domain-specific-in-action-id",
+						ActionId:   "in-action-start-action-id",
 						ActionType: tokensclient.ActionTypeIn,
 						Properties: map[string]interface{}{
 							"cf":      "{$.ssn}",
@@ -97,6 +97,17 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				StateType:   tokensclient.StateStd,
 				Description: "description of generated state",
 				Help:        "help of generated state",
+				Actions: []tokensclient.ActionDefinition{
+					{
+						ActionId:   "in-action-generated-action-id",
+						ActionType: tokensclient.ActionTypeIn,
+						Properties: map[string]interface{}{
+							"cf":      "{$.ssn}",
+							"product": "{$.product}",
+							"channel": "{$.channel}",
+						},
+					},
+				},
 				BusinessView: tokensclient.BusinessViewState{
 					Code:        "whatever",
 					Description: "whatever description",
