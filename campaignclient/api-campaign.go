@@ -1,4 +1,4 @@
-package tokensclient
+package campaignclient
 
 import (
 	"fmt"
@@ -10,10 +10,10 @@ import (
 	"strings"
 )
 
-func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*TokenContext, error) {
-	const semLogContext = "tpm-tokens-client::get-token-context"
+func (c *Client) GetCampaignById(reqCtx ApiRequestContext, ctxId string) (*Campaign, error) {
+	const semLogContext = "campaign-client::get-campaign"
 
-	ep := c.tokenContextApiUrl(TokenContextGet, ctxId, nil)
+	ep := c.campaignApiUrl(CampaignGet, ctxId, nil)
 
 	req, err := c.client.NewRequest(http.MethodGet, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -35,10 +35,9 @@ func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*T
 	return resp, err
 }
 
-func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContext, ct string) (*TokenContext, error) {
-	const semLogContext = "tpm-tokens-client::new-token-context"
-
-	ep := c.tokenContextApiUrl(TokenContextNew, "", nil)
+func (c *Client) NewCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct string) (*Campaign, error) {
+	const semLogContext = "campaign-client::new"
+	ep := c.campaignApiUrl(CampaignNew, "", nil)
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
@@ -76,10 +75,9 @@ func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContex
 	return resp, err
 }
 
-func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContext, ct string) (*TokenContext, error) {
-	const semLogContext = "tpm-tokens-client::new-token-context"
-
-	ep := c.tokenContextApiUrl(TokenContextPut, tokenCtx.Id, nil)
+func (c *Client) ReplaceCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct string) (*Campaign, error) {
+	const semLogContext = "campaign-client::replace"
+	ep := c.campaignApiUrl(CampaignPut, tokenCtx.Id, nil)
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
@@ -117,10 +115,10 @@ func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenCo
 	return resp, err
 }
 
-func (c *Client) DeleteTokenContext(reqCtx ApiRequestContext, ctxId string) (bool, error) {
-	const semLogContext = "tpm-tokens-client::delete-token-context"
+func (c *Client) DeleteCampaign(reqCtx ApiRequestContext, ctxId string) (bool, error) {
+	const semLogContext = "campaign-client::delete"
 
-	ep := c.tokenContextApiUrl(TokenContextDelete, ctxId, nil)
+	ep := c.campaignApiUrl(CampaignDelete, ctxId, nil)
 
 	req, err := c.client.NewRequest(http.MethodDelete, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -156,14 +154,14 @@ func (c *Client) DeleteTokenContext(reqCtx ApiRequestContext, ctxId string) (boo
 	return rc, err
 }
 
-func (c *Client) tokenContextApiUrl(apiPath string, ctxId string, qParams []har.NameValuePair) string {
+func (c *Client) campaignApiUrl(apiPath string, ctxId string, qParams []har.NameValuePair) string {
 	var sb = strings.Builder{}
 	sb.WriteString(c.host.Scheme)
 	sb.WriteString("://")
 	sb.WriteString(c.host.HostName)
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
-	sb.WriteString(strings.Replace(apiPath, TokenContextIdPathPlaceHolder, ctxId, 1))
+	sb.WriteString(strings.Replace(apiPath, CampaignIdPathPlaceHolder, ctxId, 1))
 
 	if len(qParams) > 0 {
 		sb.WriteString("?")

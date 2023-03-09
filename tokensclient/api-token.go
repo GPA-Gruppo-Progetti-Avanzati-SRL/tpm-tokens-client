@@ -22,7 +22,7 @@ func (tok *TokenApiRequest) ToJSON() ([]byte, error) {
 }
 
 func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
-	const semLogContext = "tpm-tokens::get-token"
+	const semLogContext = "tpm-tokens-client::get-token"
 
 	ep := c.tokenApiUrl(GetToken, ctxId, tokId, nil)
 
@@ -47,7 +47,7 @@ func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) 
 }
 
 func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenApiRequest, ct string) (*Token, error) {
-	const semLogContext = "tpm-tokens::new-token"
+	const semLogContext = "tpm-tokens-client::new-token"
 
 	op := "use"
 	if token.CheckOnlyFLag {
@@ -92,7 +92,7 @@ func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenAp
 }
 
 func (c *Client) DeleteToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*ApiResponse, error) {
-	const semLogContext = "tpm-tokens::delete-token"
+	const semLogContext = "tpm-tokens-client::delete-token"
 
 	ep := c.tokenApiUrl(DeleteToken, ctxId, tokId, nil)
 
@@ -117,7 +117,7 @@ func (c *Client) DeleteToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 }
 
 func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
-	const semLogContext = "tpm-tokens::commit-token"
+	const semLogContext = "tpm-tokens-client::commit-token"
 
 	ep := c.tokenApiUrl(TokenCommit, ctxId, tokId, nil)
 
@@ -142,7 +142,7 @@ func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 }
 
 func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
-	const semLogContext = "tpm-tokens::commit-token"
+	const semLogContext = "tpm-tokens-client::commit-token"
 
 	ep := c.tokenApiUrl(TokenRollback, ctxId, tokId, nil)
 
@@ -167,7 +167,7 @@ func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId str
 }
 
 func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*Token, error) {
-	const semLogContext = "tpm-tokens::token-next"
+	const semLogContext = "tpm-tokens-client::token-next"
 
 	ep := c.tokenApiUrl(TokenNext, ctxId, tokId, nil)
 
@@ -208,7 +208,7 @@ func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string,
 }
 
 func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*Token, error) {
-	const semLogContext = "tpm-tokens::token-check"
+	const semLogContext = "tpm-tokens-client::token-check"
 
 	ep := c.tokenApiUrl(TokenCheck, ctxId, tokId, nil)
 
