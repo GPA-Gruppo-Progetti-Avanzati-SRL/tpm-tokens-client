@@ -39,7 +39,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 	},
 	TokenContext: tokensclient.TokenContext{
 		Id:        "BPMIFI",
-		Pkey:      tokensclient.ContextPartitionKey,
+		Pkey:      campaignclient.CosPartitionKey,
 		Platform:  "BP",
 		Version:   tokensclient.TokenContextBaseVersion,
 		Suspended: false,
@@ -82,6 +82,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "product",
 									ValidationRule: "required",
+								},
+							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
 								},
 							},
 							ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
@@ -167,6 +173,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Expression: "\"{$.ssn}\" == \"{v:ssn1}\" && \"{$.channel}\" == \"{v:channel}\" && \"{$.product}\" == \"{v:product}\"",
 								},
 							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
+								},
+							},
 							ProcessVarDefinitions: nil,
 							TTL: tokensclient.TTLDefinition{
 								Value: "1d",
@@ -193,6 +205,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Expression: "\"{$.result}\" == \"OK\"",
 								},
 							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
+								},
+							},
 						},
 						{
 							To: "generated",
@@ -200,6 +218,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "result",
 									ValidationRule: "required",
+								},
+							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
 								},
 							},
 							Rules: []tokensclient.Rule{
@@ -232,9 +256,26 @@ var campaignTestCase001 = campaignclient.Campaign{
 									ValidationRule: "required",
 								},
 							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
+								},
+								{
+									Id:   "{v:ssn2}",
+									Role: "secondary",
+								},
+							},
+							ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
+								{
+									Name:        "ssn2",
+									Description: "second customer id: social security number",
+									Value:       "{$.ssn}",
+								},
+							},
 							Rules: []tokensclient.Rule{
 								{
-									Expression: "\"{$.ssn}\" != \"{v:ssn}\" && \"{$.channel}\" == \"UP\"",
+									Expression: "\"{$.ssn}\" != \"{v:ssn1}\" && \"{$.channel}\" == \"UP\"",
 								},
 							},
 						},
@@ -252,6 +293,16 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "result",
 									ValidationRule: "required",
+								},
+							},
+							Bearers: []tokensclient.BearerRef{
+								{
+									Id:   "{v:ssn1}",
+									Role: "primary",
+								},
+								{
+									Id:   "{v:ssn2}",
+									Role: "secondary",
 								},
 							},
 							Rules: []tokensclient.Rule{
