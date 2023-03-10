@@ -67,13 +67,14 @@ type TokenIdProviderType struct {
 
 type TokenContext struct {
 	Id                  string               `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
-	Pkey                string               `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
+	Pkey                string               `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
 	Platform            string               `yaml:"platform,omitempty" mapstructure:"platform,omitempty" json:"platform,omitempty"`
 	Version             string               `yaml:"version,omitempty" mapstructure:"version,omitempty" json:"version,omitempty"`
 	Suspended           bool                 `yaml:"suspended,omitempty" mapstructure:"suspended,omitempty" json:"suspended,omitempty"`
 	Timeline            Timeline             `yaml:"timeline,omitempty" mapstructure:"timeline,omitempty" json:"timeline,omitempty"`
 	StateMachine        StateMachine         `yaml:"state-machine,omitempty" mapstructure:"state-machine,omitempty" json:"state-machine,omitempty"`
 	TokenIdProviderType *TokenIdProviderType `yaml:"token-id-provider-type,omitempty" mapstructure:"token-id-provider-type,omitempty" json:"token-id-provider-type,omitempty"`
+	TTL                 int                  `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
 func (ctx *TokenContext) ToJSON() ([]byte, error) {

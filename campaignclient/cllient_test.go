@@ -50,7 +50,7 @@ func TestCampaignClient(t *testing.T) {
 		defer c.Close()
 	}
 
-	cli, err := campaignclient.NewTokensApiClient(&cliConfig)
+	cli, err := campaignclient.NewCampaignApiClient(&cliConfig)
 	require.NoError(t, err)
 	defer cli.Close()
 
@@ -58,7 +58,7 @@ func TestCampaignClient(t *testing.T) {
 }
 
 func executeTestCampaignClient(t *testing.T, cli *campaignclient.Client, campaignTestCase *campaignclient.Campaign) {
-	apiRequestCtx := campaignclient.NewApiRequestContext(campaignclient.ApiRequestWithApiKey("ApiKeyWfm"))
+	apiRequestCtx := campaignclient.NewApiRequestContext(campaignclient.ApiRequestWithApiKey("ApiKeyLeasCabWfM"))
 
 	campaignTestCase.Id = "TESTCTX"
 	resp, err := cli.NewCampaign(apiRequestCtx, campaignTestCase, "")

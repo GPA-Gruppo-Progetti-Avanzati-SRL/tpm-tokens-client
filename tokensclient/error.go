@@ -25,13 +25,13 @@ const (
 	TokenContextAlreadyExists            = "tok-ctx-already-exists"
 )
 
-type TokenErrorInfo struct {
+type TokErrorInfo struct {
 	Code       string
 	Text       string
 	StatusCode int
 }
 
-var TokenErrorTextMapping = map[string]TokenErrorInfo{
+var TokErrorTextMapping = map[string]TokErrorInfo{
 	TokenErrorSystem:                     {StatusCode: http.StatusBadRequest, Code: TokenErrorSystem, Text: "general error"},
 	TokenErrorSystemConfiguration:        {StatusCode: http.StatusBadRequest, Code: TokenErrorSystemConfiguration, Text: "system error"},
 	TokenErrorExpressionEvaluation:       {StatusCode: http.StatusInternalServerError, Code: TokenErrorExpressionEvaluation, Text: "expression evaluation error"},
@@ -59,15 +59,15 @@ func (te *TokError) Error() string {
 	return fmt.Sprintf("%s - %s", te.Code, te.Text)
 }
 
-func NewError(c string, d string) error {
-	t := TokError{Code: c, Description: d, Text: MapErrorCode(c).Text}
+func NewTokError(c string, d string) error {
+	t := TokError{Code: c, Description: d, Text: MapErrorCode2TokErrorInfo(c).Text}
 	return &t
 }
 
-func MapErrorCode(c string) TokenErrorInfo {
+func MapErrorCode2TokErrorInfo(c string) TokErrorInfo {
 
-	ti := TokenErrorInfo{Code: c, Text: TokenErrorGenericText, StatusCode: http.StatusBadRequest}
-	if ti, ok := TokenErrorTextMapping[c]; ok {
+	ti := TokErrorInfo{Code: c, Text: TokenErrorGenericText, StatusCode: http.StatusBadRequest}
+	if ti, ok := TokErrorTextMapping[c]; ok {
 		return ti
 	}
 
@@ -77,7 +77,7 @@ func MapErrorCode(c string) TokenErrorInfo {
 /*
 func MapErrorCode2Text(errCode string) string {
 	t := TokenErrorGenericText
-	if text, ok := TokenErrorTextMapping[errCode]; ok {
+	if text, ok := TokErrorTextMapping[errCode]; ok {
 		t = text.Text
 	}
 

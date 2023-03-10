@@ -21,7 +21,7 @@ func (c *Client) GetCampaignById(reqCtx ApiRequestContext, ctxId string) (*Campa
 	}
 
 	harEntry, err := c.client.Execute(req,
-		restclient.ExecutionWithOpName("client-get-token-context"),
+		restclient.ExecutionWithOpName(semLogContext),
 		restclient.ExecutionWithRequestId(reqCtx.RequestId),
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
@@ -31,7 +31,7 @@ func (c *Client) GetCampaignById(reqCtx ApiRequestContext, ctxId string) (*Campa
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	resp, err := DeserializeTokenContextContentResponse(harEntry)
+	resp, err := DeserializeCampaignContentResponse(harEntry)
 	return resp, err
 }
 
@@ -61,7 +61,7 @@ func (c *Client) NewCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct st
 	}
 
 	harEntry, err := c.client.Execute(req,
-		restclient.ExecutionWithOpName("client-new-token-context"),
+		restclient.ExecutionWithOpName(semLogContext),
 		restclient.ExecutionWithRequestId(reqCtx.RequestId),
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
@@ -71,7 +71,7 @@ func (c *Client) NewCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct st
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	resp, err := DeserializeTokenContextContentResponse(harEntry)
+	resp, err := DeserializeCampaignContentResponse(harEntry)
 	return resp, err
 }
 
@@ -101,7 +101,7 @@ func (c *Client) ReplaceCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, c
 	}
 
 	harEntry, err := c.client.Execute(req,
-		restclient.ExecutionWithOpName("client-replace-token-context"),
+		restclient.ExecutionWithOpName(semLogContext),
 		restclient.ExecutionWithRequestId(reqCtx.RequestId),
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),
@@ -111,7 +111,7 @@ func (c *Client) ReplaceCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, c
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	resp, err := DeserializeTokenContextContentResponse(harEntry)
+	resp, err := DeserializeCampaignContentResponse(harEntry)
 	return resp, err
 }
 
@@ -126,7 +126,7 @@ func (c *Client) DeleteCampaign(reqCtx ApiRequestContext, ctxId string) (bool, e
 	}
 
 	harEntry, err := c.client.Execute(req,
-		restclient.ExecutionWithOpName("client-delete-token-context"),
+		restclient.ExecutionWithOpName(semLogContext),
 		restclient.ExecutionWithRequestId(reqCtx.RequestId),
 		restclient.ExecutionWithLraId(reqCtx.LRAId),
 		restclient.ExecutionWithSpan(reqCtx.Span),

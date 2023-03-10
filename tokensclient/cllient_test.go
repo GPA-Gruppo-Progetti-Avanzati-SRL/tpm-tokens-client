@@ -5,6 +5,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing/filetracer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
+	"net/http"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog"
@@ -160,6 +161,85 @@ func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContext
 	resp, err = cli.RollbackToken(apiRequestCtx, tokenContextTestCase.Id, tokenId)
 	require.NoError(t, err)
 	t.Logf("token-rollback [%s] - NoEvents: %d - json: %s", resp.Id, len(resp.Events), string(resp.MustToJSON()))
+}
+
+/*
+ *
+ */
+
+var bearerTestCase001 = tokensclient.Bearer{
+	Pkey:           "MINNIE",
+	TokenContextId: "BPMIFI",
+	Properties:     nil,
+}
+
+func TestBearerClient(t *testing.T) {
+
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+	c, err := InitTracing(t)
+	require.NoError(t, err)
+	if c != nil {
+		defer c.Close()
+	}
+
+	cHar, err := InitHarTracing(t)
+	require.NoError(t, err)
+	if cHar != nil {
+		defer cHar.Close()
+	}
+
+	harTracingSpan := hartracing.GlobalTracer().StartSpan()
+	defer harTracingSpan.Finish()
+
+	cli, err := tokensclient.NewTokensApiClient(&cliConfig, restclient.WithHarSpan(harTracingSpan))
+	require.NoError(t, err)
+	defer cli.Close()
+
+	executeTestBearerClient(t, cli, &bearerTestCase001)
+}
+
+func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.Bearer) {
+	apiRequestCtx := tokensclient.NewApiRequestContext(tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"))
+
+	bearerRequest := tokensclient.BearerApiRequest{
+		Origin: "test",
+		TTL:    -1,
+	}
+
+	ber, err := cli.AddBearer2Context(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, &bearerRequest, "")
+	require.NoError(t, err)
+	t.Log(ber)
+
+	bearerRequest.Properties = map[string]interface{}{"first-name": "PAOLINO"}
+	ber, err = cli.UpdateBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, &bearerRequest, "")
+	require.NoError(t, err)
+	t.Log(ber)
+
+	resp, err := cli.AddToken2BearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID")
+	require.NoError(t, err)
+	t.Log(resp)
+
+	resp, err = cli.GetBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId)
+	require.NoError(t, err)
+	t.Log(resp)
+
+	resp, err = cli.RemoveTokenFromBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID")
+	require.NoError(t, err)
+	t.Log(resp)
+
+	ber, err = cli.RemoveBearerFromContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId)
+	require.NoError(t, err)
+	t.Log(resp)
+
+	resp, err = cli.GetBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId)
+	if err != nil {
+		if terr, ok := err.(*tokensclient.ApiResponse); ok {
+			if terr.StatusCode != http.StatusNotFound {
+				t.Fatal(err)
+			}
+		}
+	}
+
 }
 
 const (

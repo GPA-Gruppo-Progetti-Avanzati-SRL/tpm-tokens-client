@@ -27,8 +27,8 @@ func (c *Client) Close() {
 	c.client.Close()
 }
 
-func NewTokensApiClient(cfg *Config, opts ...restclient.Option) (*Client, error) {
-	const semLogContext = "new-tokens-api-client"
+func NewCampaignApiClient(cfg *Config, opts ...restclient.Option) (*Client, error) {
+	const semLogContext = "new-campaign-api-client"
 	client := restclient.NewClient(&cfg.Config, opts...)
 
 	h := cfg.Host
@@ -55,9 +55,9 @@ func NewTokensApiClient(cfg *Config, opts ...restclient.Option) (*Client, error)
 	return &Client{client: client, host: h}, nil
 }
 
-func DeserializeTokenContextContentResponse(resp *har.Entry) (*Campaign, error) {
+func DeserializeCampaignContentResponse(resp *har.Entry) (*Campaign, error) {
 
-	const semLogContext = "tokens-api-client::deserialize-token-context-response"
+	const semLogContext = "campaign-api-client::deserialize-campaign-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
 		err := errors.New("cannot deserialize null response")
 		log.Error().Err(err).Msg(semLogContext)
@@ -68,7 +68,7 @@ func DeserializeTokenContextContentResponse(resp *har.Entry) (*Campaign, error) 
 	var err error
 	switch resp.Response.Status {
 	case http.StatusOK:
-		resultObj, err = DeserializeContext(resp.Response.Content.Data)
+		resultObj, err = DeserializeCampaign(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}
@@ -89,7 +89,7 @@ func DeserializeTokenContextContentResponse(resp *har.Entry) (*Campaign, error) 
 
 func DeserializeApiResponse(resp *har.Entry) (*ApiResponse, error) {
 
-	const semLogContext = "tokens-api-client::deserialize-api-response"
+	const semLogContext = "campaign-api-client::deserialize-api-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
 		err := errors.New("cannot deserialize null response")
 		log.Error().Err(err).Msg(semLogContext)

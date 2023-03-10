@@ -69,6 +69,7 @@ type Event struct {
 	ExpiryTs         string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
 	Vars             ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
 	Actions          []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+	Bearers          []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 }
 
 type Token struct {
@@ -77,6 +78,7 @@ type Token struct {
 	CtxId    string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
 	Events   []Event                `yaml:"events,omitempty" mapstructure:"events,omitempty" json:"events,omitempty"`
 	Metadata map[string]interface{} `yaml:"metadata,omitempty" mapstructure:"metadata,omitempty" json:"metadata,omitempty"`
+	TTL      int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
 func DeserializeToken(b []byte) (*Token, error) {

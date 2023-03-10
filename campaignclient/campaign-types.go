@@ -109,7 +109,7 @@ func (c *Campaign) MustToJSON() []byte {
 	return b
 }
 
-func DeserializeContext(b []byte) (*Campaign, error) {
+func DeserializeCampaign(b []byte) (*Campaign, error) {
 	ctx := Campaign{}
 	err := json.Unmarshal(b, &ctx)
 	if err != nil {

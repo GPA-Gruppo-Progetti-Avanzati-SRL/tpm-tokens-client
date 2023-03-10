@@ -69,6 +69,11 @@ type Property struct {
 	Help           string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
 }
 
+type BearerRef struct {
+	Id   string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Role string `yaml:"role,omitempty" mapstructure:"role,omitempty" json:"role,omitempty"`
+}
+
 type Transition struct {
 	To                    string                 `yaml:"to,omitempty" mapstructure:"to,omitempty" json:"to,omitempty"`
 	Order                 int                    `yaml:"order,omitempty" mapstructure:"order,omitempty" json:"order,omitempty"`
@@ -77,6 +82,7 @@ type Transition struct {
 	ProcessVarDefinitions []ProcessVarDefinition `yaml:"process-vars,omitempty" mapstructure:"process-vars,omitempty" json:"process-vars,omitempty"`
 	TTL                   TTLDefinition          `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 	Actions               []ActionDefinition     `yaml:"out-actions,omitempty" mapstructure:"out-actions,omitempty" json:"out-actions,omitempty"`
+	Bearers               []BearerRef            `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 	Description           string                 `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 }
 
@@ -91,7 +97,7 @@ func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error
 		}
 	}
 
-	return StateDefinition{}, NewError(TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
+	return StateDefinition{}, NewTokError(TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
 }
 
 func EvaluateActionDefinitions(actions []ActionDefinition, eCtx *expression.Context, actionType ActionType, takeFirstOnly bool) ([]Action, error) {
@@ -131,7 +137,7 @@ func EvalProperties(eCtx *expression.Context, propsDefinition map[string]interfa
 			pv[n], err = eCtx.EvalOne(s)
 
 			if err != nil {
-				return nil, NewError(TokenErrorExpressionEvaluation, err.Error())
+				return nil, NewTokError(TokenErrorExpressionEvaluation, err.Error())
 			}
 		}
 
