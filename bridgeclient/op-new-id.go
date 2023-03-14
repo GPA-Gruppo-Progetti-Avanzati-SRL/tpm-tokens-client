@@ -24,7 +24,7 @@ type NewTokenIdRequest struct {
 	TokenContextId string                 `mapstructure:"context-id,omitempty"  json:"context-id,omitempty" yaml:"context-id,omitempty"`
 	Id             string                 `mapstructure:"id,omitempty"  json:"id,omitempty" yaml:"id,omitempty"`
 	Unique         bool                   `mapstructure:"unique"  json:"unique" yaml:"unique"`
-	CustomData     map[string]interface{} `mapstructure:"custom-data,omitempty"  json:"custom-data,omitempty" yaml:"custom-data,omitempty"`
+	CustomData     map[string]interface{} `mapstructure:"properties,omitempty"  json:"properties,omitempty" yaml:"properties,omitempty"`
 }
 
 type NewTokenIdResponse struct {
