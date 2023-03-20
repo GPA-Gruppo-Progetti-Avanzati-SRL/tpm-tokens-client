@@ -2,6 +2,7 @@ package tokensclient
 
 import (
 	"encoding/json"
+	"github.com/rs/zerolog/log"
 
 	"strings"
 )
@@ -13,7 +14,8 @@ const (
 )
 
 type TokenRef struct {
-	Id string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Id   string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Role string `yaml:"role,omitempty" mapstructure:"role,omitempty" json:"role,omitempty"`
 }
 
 type Bearer struct {
@@ -67,15 +69,24 @@ func (ber *Bearer) HasToken(tokId string) bool {
 	return false
 }
 
-func (ber *Bearer) AddToken(tokId string) bool {
+func (ber *Bearer) AddToken(tokId string, role string) bool {
 
+	const semLogContext = "bearer::add-token"
 	for _, t := range ber.TokenRefs {
 		if t.Id == tokId {
 			return false
 		}
 	}
 
-	ber.TokenRefs = append(ber.TokenRefs, TokenRef{Id: tokId})
+	if role == "" {
+		role = "primary"
+	}
+
+	if role != "primary" && role != "secondary" {
+		log.Error().Str("role", role).Str("token-id", tokId).Msg(semLogContext + " unsupported role")
+	}
+
+	ber.TokenRefs = append(ber.TokenRefs, TokenRef{Id: tokId, Role: role})
 	return true
 }
 

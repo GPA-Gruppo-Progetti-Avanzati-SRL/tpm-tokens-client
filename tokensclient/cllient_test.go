@@ -215,7 +215,7 @@ func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContex
 	require.NoError(t, err)
 	t.Log(ber)
 
-	resp, err := cli.AddToken2BearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID")
+	resp, err := cli.AddToken2BearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID", "secondary")
 	require.NoError(t, err)
 	t.Log(resp)
 

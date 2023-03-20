@@ -5,22 +5,34 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 )
 
+const (
+	InputParamSsn     = "{$.ssn}"
+	InputParamChannel = "{$.channel}"
+	InputParamProduct = "{$.product}"
+)
+
 // This file is being separated from the actual tests because in the current state of affairs it has to be aligned with the tokensazstore package one and the client one.
 // easier to copy a file and change package instead of copying and pasting
 
 var campaignTestCase001 = campaignclient.Campaign{
+	Filters: campaignclient.Filters{
+		Canale:   "APP",
+		Servizio: "CC",
+		Prodotto: "Start",
+		Fase:     "Apertura",
+	},
 	CampaignType: campaignclient.Type{
 		Code:          "MGM",
 		Description:   "member get member",
 		BannerTokenId: "BPMIFI-BANNER",
 		Unique:        true,
 		PromoCode:     "CPQ promo code",
-		TargetProducts: []campaignclient.ProductInfo{
-			{
-				Code:  "Codice prodotto interessato alla campagna (es. Start)",
-				Ambit: "Codice servizio collegato (es. CC)",
-			},
-		},
+		//TargetProducts: []campaignclient.ProductInfo{
+		//	{
+		//		Code:  "Codice prodotto interessato alla campagna (es. Start)",
+		//		Ambit: "Codice servizio collegato (es. CC)",
+		//	},
+		//},
 	},
 	Title:       "L'amicizia ti premia",
 	Description: "Porta un amico ed otterrete entrambi un conto gratuito per 12 mesi",
@@ -33,8 +45,13 @@ var campaignTestCase001 = campaignclient.Campaign{
 			Type:        "regolemento",
 			Name:        "Regolamento Campagna",
 			ContentType: "application/pdf",
-			Url:         "http://www.posteitaliane.it/campagne/BPMIFI/regolemento",
-			Help:        "Scarica il regolamento con tutte le informazioni della campagna",
+			Locations: []campaignclient.LinkedResourceLocation{
+				{
+					Type: "straight",
+					Url:  "http://www.posteitaliane.it/campagne/BPMIFI/regolemento",
+				},
+			},
+			Help: "Scarica il regolamento con tutte le informazioni della campagna",
 		},
 	},
 	TokenContext: tokensclient.TokenContext{
@@ -60,9 +77,9 @@ var campaignTestCase001 = campaignclient.Campaign{
 							ActionId:   "in-action-start-action-id",
 							ActionType: tokensclient.ActionTypeIn,
 							Properties: map[string]interface{}{
-								"cf":      "{$.ssn}",
-								"product": "{$.product}",
-								"channel": "{$.channel}",
+								"cf":      InputParamSsn,
+								"product": InputParamProduct,
+								"channel": InputParamChannel,
 							},
 						},
 					},
@@ -94,17 +111,17 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:        "ssn1",
 									Description: "customer id: social security number",
-									Value:       "{$.ssn}",
+									Value:       InputParamSsn,
 								},
 								{
 									Name:        "channel",
 									Description: "a generic property used for routing",
-									Value:       "{$.channel}",
+									Value:       InputParamChannel,
 								},
 								{
 									Name:        "product",
 									Description: "code of a product",
-									Value:       "{$.product}",
+									Value:       InputParamProduct,
 								},
 							},
 							TTL: tokensclient.TTLDefinition{
@@ -115,14 +132,14 @@ var campaignTestCase001 = campaignclient.Campaign{
 									ActionId:   tokensclient.ActionTypeNewId,
 									ActionType: tokensclient.ActionTypeNewId,
 									Properties: map[string]interface{}{
-										"cf": "{$.ssn}",
+										"cf": InputParamSsn,
 									},
 								},
 								{
 									ActionId:   "domain-specific-out-action-id",
 									ActionType: tokensclient.ActionTypeOut,
 									Properties: map[string]interface{}{
-										"cf":      "{$.ssn}",
+										"cf":      InputParamSsn,
 										"product": "{v:product}",
 									},
 								},
@@ -140,9 +157,9 @@ var campaignTestCase001 = campaignclient.Campaign{
 							ActionId:   "in-action-generated-action-id",
 							ActionType: tokensclient.ActionTypeIn,
 							Properties: map[string]interface{}{
-								"cf":      "{$.ssn}",
-								"product": "{$.product}",
-								"channel": "{$.channel}",
+								"cf":      InputParamSsn,
+								"product": InputParamProduct,
+								"channel": InputParamChannel,
 							},
 						},
 					},
@@ -270,7 +287,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:        "ssn2",
 									Description: "second customer id: social security number",
-									Value:       "{$.ssn}",
+									Value:       InputParamSsn,
 								},
 							},
 							Rules: []tokensclient.Rule{

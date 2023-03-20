@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
+	"strings"
 	"time"
 )
 
@@ -26,12 +27,20 @@ type ProductInfo struct {
 	Ambit string `yaml:"ambit,omitempty" mapstructure:"ambit,omitempty" json:"ambit,omitempty"`
 }
 
+type TokenMode string
+
+const (
+	TokenModeBatch  = "batch"
+	TokenModeOnline = "online"
+)
+
 type Type struct {
 	Code           string        `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 	Description    string        `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 	BannerTokenId  string        `yaml:"banner-token-id,omitempty" mapstructure:"banner-token-id,omitempty" json:"banner-token-id,omitempty"`
 	Unique         bool          `yaml:"unique,omitempty" mapstructure:"unique,omitempty" json:"unique,omitempty"`
 	PromoCode      string        `yaml:"promo,omitempty" mapstructure:"promo,omitempty" json:"promo,omitempty"`
+	TokenMode      TokenMode     `yaml:"token-mode,omitempty" mapstructure:"token-mode,omitempty" json:"token-mode,omitempty"`
 	TargetProducts []ProductInfo `yaml:"target-products,omitempty" mapstructure:"target-products,omitempty" json:"target-products,omitempty"`
 }
 
@@ -40,16 +49,30 @@ type AdditionalInfo struct {
 	AwardDescription string `yaml:"award-description,omitempty" mapstructure:"award-description,omitempty" json:"award-description,omitempty"`
 }
 
+type LinkedResourceLocation struct {
+	Type string `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Url  string `yaml:"url,omitempty" mapstructure:"url,omitempty" json:"url,omitempty"`
+}
+
 type LinkedResource struct {
-	Type        string `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	Name        string `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
-	ContentType string `yaml:"content-type,omitempty" mapstructure:"content-type,omitempty" json:"content-type,omitempty"`
-	Url         string `yaml:"url,omitempty" mapstructure:"url,omitempty" json:"url,omitempty"`
-	Help        string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	Type        string                   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Name        string                   `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	ContentType string                   `yaml:"content-type,omitempty" mapstructure:"content-type,omitempty" json:"content-type,omitempty"`
+	Locations   []LinkedResourceLocation `yaml:"locations,omitempty" mapstructure:"locations,omitempty" json:"locations,omitempty"`
+	Help        string                   `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+}
+
+type Filters struct {
+	Canale   string `yaml:"canale,omitempty" mapstructure:"canale,omitempty" json:"canale,omitempty"`
+	Servizio string `yaml:"servizio,omitempty" mapstructure:"servizio,omitempty" json:"servizio,omitempty"`
+	Prodotto string `yaml:"prodotto,omitempty" mapstructure:"prodotto,omitempty" json:"prodotto,omitempty"`
+	Fase     string `yaml:"fase,omitempty" mapstructure:"fase,omitempty" json:"fase,omitempty"`
+	Timing   string `yaml:"-" mapstructure:"-" json:"-"`
 }
 
 type Campaign struct {
 	tokensclient.TokenContext `mapstructure:",squash"  yaml:",inline"`
+	Filters                   Filters          `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
 	CampaignType              Type             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	Title                     string           `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
 	Description               string           `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
@@ -76,11 +99,84 @@ type CampaignInfo struct {
 	Platform     string                `yaml:"platform,omitempty" mapstructure:"platform,omitempty" json:"platform,omitempty"`
 	Version      string                `yaml:"version,omitempty" mapstructure:"version,omitempty" json:"version,omitempty"`
 	Timeline     tokensclient.Timeline `yaml:"timeline,omitempty" mapstructure:"timeline,omitempty" json:"timeline,omitempty"`
+	Filters      Filters               `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
 	CampaignType Type                  `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	Title        string                `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
 	Description  string                `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 	AddInfo      AdditionalInfo        `yaml:"additional-info,omitempty" mapstructure:"additional-info,omitempty" json:"additional-info,omitempty"`
 	Resources    []LinkedResource      `yaml:"resources,omitempty" mapstructure:"resources,omitempty" json:"resources,omitempty"`
+}
+
+func (c *CampaignInfo) Accept(criteria *Filters) bool {
+
+	rc := true
+	if rc && !checkTiming(c.Timeline, criteria.Timing) {
+		rc = false
+	}
+
+	if rc && !checkFilter(c.Filters.Canale, criteria.Canale) {
+		rc = false
+	}
+
+	if rc && !checkFilter(c.Filters.Servizio, criteria.Servizio) {
+		rc = false
+	}
+
+	if rc && !checkFilter(c.Filters.Prodotto, criteria.Prodotto) {
+		rc = false
+	}
+
+	if rc && !checkFilter(c.Filters.Fase, criteria.Fase) {
+		rc = false
+	}
+
+	return rc
+}
+
+func checkFilter(val string, criteria string) bool {
+	if val == "*" || criteria == "" {
+		return true
+	}
+
+	val = strings.ToLower(val)
+
+	if strings.Index(val, ",") >= 0 {
+		arr := strings.Split(val, ",")
+		for _, s := range arr {
+			if s == criteria {
+				return true
+			}
+		}
+
+		return false
+	}
+
+	return strings.ToLower(val) == criteria
+}
+
+func checkTiming(val tokensclient.Timeline, criteria string) bool {
+	if criteria == "" {
+		return true
+	}
+
+	today := time.Now().Format("20060102")
+	rc := false
+	switch criteria {
+	case "next":
+		if today < val.StartDate {
+			rc = true
+		}
+	case "current":
+		if today >= val.StartDate && today <= val.EndDate {
+			rc = true
+		}
+	case "past":
+		if today > val.EndDate {
+			rc = true
+		}
+	}
+
+	return rc
 }
 
 /*

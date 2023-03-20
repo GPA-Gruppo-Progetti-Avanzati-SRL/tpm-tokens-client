@@ -150,11 +150,11 @@ func (c *Client) RemoveBearerFromContext(reqCtx ApiRequestContext, bearerId, ctx
 	return resp, err
 }
 
-func (c *Client) AddToken2BearerInContext(reqCtx ApiRequestContext, bearerId, ctxId, tokId string) (*Bearer, error) {
+func (c *Client) AddToken2BearerInContext(reqCtx ApiRequestContext, bearerId, ctxId, tokId string, role string) (*Bearer, error) {
 	const semLogContext = "tpm-tokens-client::add-token-2-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)
 
-	ep := c.bearerApiUrl(AddToken2BearerInContextPost, bearerId, ctxId, tokId, nil)
+	ep := c.bearerApiUrl(AddToken2BearerInContextPost, bearerId, ctxId, tokId, []har.NameValuePair{{Name: "role", Value: role}})
 
 	req, err := c.client.NewRequest(http.MethodPost, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
