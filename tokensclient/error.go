@@ -18,6 +18,7 @@ const (
 	TokenExpiredError                    = "tok-expired-err"
 	TokenFinalStateAlreadyReachedError   = "tok-final-state-err"
 	TokenAlreadyExists                   = "tok-already-exists"
+	TokenNotFoundError                   = "tok-not-found-err"
 	TokenDupRequestError                 = "tok-err-dup-request"
 	TokenErrorGenericText                = "generic error"
 	TokenContextNotActiveError           = "tok-ctx-not-active"
@@ -47,6 +48,7 @@ var TokErrorTextMapping = map[string]TokErrorInfo{
 	TokenContextAlreadyExists:            {StatusCode: http.StatusBadRequest, Code: TokenContextAlreadyExists, Text: "token context already exists"},
 	TokenContextNotActiveError:           {StatusCode: http.StatusBadRequest, Code: TokenContextNotActiveError, Text: "token context not active"},
 	TokenExpiredError:                    {StatusCode: http.StatusConflict, Code: TokenExpiredError, Text: "token expired"},
+	TokenNotFoundError:                   {StatusCode: http.StatusNotFound, Code: TokenNotFoundError, Text: "token not found"},
 }
 
 type TokError struct {

@@ -91,14 +91,17 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "ssn",
 									ValidationRule: "required",
+									Help:           "ssn is required",
 								},
 								{
 									Name:           "channel",
 									ValidationRule: "required",
+									Help:           "channel is required",
 								},
 								{
 									Name:           "product",
 									ValidationRule: "required",
+									Help:           "product is required",
 								},
 							},
 							Bearers: []tokensclient.BearerRef{
@@ -175,19 +178,31 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "ssn",
 									ValidationRule: "required",
+									Help:           "ssn is required",
 								},
 								{
 									Name:           "channel",
 									ValidationRule: "required",
+									Help:           "channel is required",
 								},
 								{
 									Name:           "product",
 									ValidationRule: "required",
+									Help:           "product is required",
 								},
 							},
 							Rules: []tokensclient.Rule{
 								{
-									Expression: "\"{$.ssn}\" == \"{v:ssn1}\" && \"{$.channel}\" == \"{v:channel}\" && \"{$.product}\" == \"{v:product}\"",
+									Expression: "\"{$.ssn}\" == \"{v:ssn1}\"",
+									Help:       "ssn doesn't match",
+								},
+								{
+									Expression: "\"{$.channel}\" == \"{v:channel}\"",
+									Help:       "channel doesn't match",
+								},
+								{
+									Expression: "\"{$.product}\" == \"{v:product}\"",
+									Help:       "product doesn't match",
 								},
 							},
 							Bearers: []tokensclient.BearerRef{
@@ -263,14 +278,17 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           "ssn",
 									ValidationRule: "required",
+									Help:           "ssn is required",
 								},
 								{
 									Name:           "channel",
 									ValidationRule: "required",
+									Help:           "channel is required",
 								},
 								{
 									Name:           "product",
 									ValidationRule: "required",
+									Help:           "product is required",
 								},
 							},
 							Bearers: []tokensclient.BearerRef{
@@ -293,6 +311,11 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Rules: []tokensclient.Rule{
 								{
 									Expression: "\"{$.ssn}\" != \"{v:ssn1}\" && \"{$.channel}\" == \"UP\"",
+									Help:       "ssn should be different",
+								},
+								{
+									Expression: "\"{$.channel}\" == \"UP\"",
+									Help:       "channel should be UP",
 								},
 							},
 						},

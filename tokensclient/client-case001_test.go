@@ -4,6 +4,11 @@ import "github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclie
 
 // This file is being separated from the actual tests because in the current state of affairs it has to be aligned with the tokensazstore package one and the client one.
 // easier to copy a file and change package instead of copying and pasting
+const (
+	InputParamSsn     = "{$.ssn}"
+	InputParamChannel = "{$.channel}"
+	InputParamProduct = "{$.product}"
+)
 
 var tokenContextTestCase001 = tokensclient.TokenContext{
 	Id:        "BPMIFI",
@@ -28,9 +33,9 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 						ActionId:   "in-action-start-action-id",
 						ActionType: tokensclient.ActionTypeIn,
 						Properties: map[string]interface{}{
-							"cf":      "{$.ssn}",
-							"product": "{$.product}",
-							"channel": "{$.channel}",
+							"cf":      InputParamSsn,
+							"product": InputParamProduct,
+							"channel": InputParamChannel,
 						},
 					},
 				},
@@ -42,14 +47,17 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 							{
 								Name:           "ssn",
 								ValidationRule: "required",
+								Help:           "ssn is required",
 							},
 							{
 								Name:           "channel",
 								ValidationRule: "required",
+								Help:           "channel is required",
 							},
 							{
 								Name:           "product",
 								ValidationRule: "required",
+								Help:           "product is required",
 							},
 						},
 						Bearers: []tokensclient.BearerRef{
@@ -62,17 +70,17 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 							{
 								Name:        "ssn1",
 								Description: "customer id: social security number",
-								Value:       "{$.ssn}",
+								Value:       InputParamSsn,
 							},
 							{
 								Name:        "channel",
 								Description: "a generic property used for routing",
-								Value:       "{$.channel}",
+								Value:       InputParamChannel,
 							},
 							{
 								Name:        "product",
 								Description: "code of a product",
-								Value:       "{$.product}",
+								Value:       InputParamProduct,
 							},
 						},
 						TTL: tokensclient.TTLDefinition{
@@ -83,14 +91,14 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 								ActionId:   tokensclient.ActionTypeNewId,
 								ActionType: tokensclient.ActionTypeNewId,
 								Properties: map[string]interface{}{
-									"cf": "{$.ssn}",
+									"cf": InputParamSsn,
 								},
 							},
 							{
 								ActionId:   "domain-specific-out-action-id",
 								ActionType: tokensclient.ActionTypeOut,
 								Properties: map[string]interface{}{
-									"cf":      "{$.ssn}",
+									"cf":      InputParamSsn,
 									"product": "{v:product}",
 								},
 							},
@@ -108,9 +116,9 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 						ActionId:   "in-action-generated-action-id",
 						ActionType: tokensclient.ActionTypeIn,
 						Properties: map[string]interface{}{
-							"cf":      "{$.ssn}",
-							"product": "{$.product}",
-							"channel": "{$.channel}",
+							"cf":      InputParamSsn,
+							"product": InputParamProduct,
+							"channel": InputParamChannel,
 						},
 					},
 				},
@@ -126,19 +134,31 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 							{
 								Name:           "ssn",
 								ValidationRule: "required",
+								Help:           "ssn is required",
 							},
 							{
 								Name:           "channel",
 								ValidationRule: "required",
+								Help:           "channel is required",
 							},
 							{
 								Name:           "product",
 								ValidationRule: "required",
+								Help:           "product is required",
 							},
 						},
 						Rules: []tokensclient.Rule{
 							{
-								Expression: "\"{$.ssn}\" == \"{v:ssn1}\" && \"{$.channel}\" == \"{v:channel}\" && \"{$.product}\" == \"{v:product}\"",
+								Expression: "\"{$.ssn}\" == \"{v:ssn1}\"",
+								Help:       "ssn doesn't match",
+							},
+							{
+								Expression: "\"{$.channel}\" == \"{v:channel}\"",
+								Help:       "channel doesn't match",
+							},
+							{
+								Expression: "\"{$.product}\" == \"{v:product}\"",
+								Help:       "product doesn't match",
 							},
 						},
 						Bearers: []tokensclient.BearerRef{
@@ -214,14 +234,17 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 							{
 								Name:           "ssn",
 								ValidationRule: "required",
+								Help:           "ssn is required",
 							},
 							{
 								Name:           "channel",
 								ValidationRule: "required",
+								Help:           "channel is required",
 							},
 							{
 								Name:           "product",
 								ValidationRule: "required",
+								Help:           "product is required",
 							},
 						},
 						Bearers: []tokensclient.BearerRef{
@@ -238,12 +261,17 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 							{
 								Name:        "ssn2",
 								Description: "second customer id: social security number",
-								Value:       "{$.ssn}",
+								Value:       InputParamSsn,
 							},
 						},
 						Rules: []tokensclient.Rule{
 							{
 								Expression: "\"{$.ssn}\" != \"{v:ssn1}\" && \"{$.channel}\" == \"UP\"",
+								Help:       "ssn should be different",
+							},
+							{
+								Expression: "\"{$.channel}\" == \"UP\"",
+								Help:       "channel should be UP",
 							},
 						},
 					},
