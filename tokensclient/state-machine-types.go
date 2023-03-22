@@ -61,7 +61,7 @@ type StateDefinition struct {
 
 type Rule struct {
 	Expression string `yaml:"expr,omitempty" mapstructure:"expr,omitempty" json:"expr,omitempty"`
-	Help       string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"elp,omitempty"`
+	Help       string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
 }
 
 type Property struct {
