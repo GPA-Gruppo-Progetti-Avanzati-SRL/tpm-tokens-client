@@ -38,7 +38,7 @@ type TTLDefinition struct {
 	Value string `yaml:"value,omitempty" mapstructure:"value,omitempty" json:"value,omitempty"`
 }
 
-type BusinessViewState struct {
+type CodeDescriptionPair struct {
 	Code        string `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 	Description string `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 }
@@ -50,24 +50,26 @@ type ProcessVarDefinition struct {
 }
 
 type StateDefinition struct {
-	Code           string             `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
-	Description    string             `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	Help           string             `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
-	BusinessView   BusinessViewState  `yaml:"business-view,omitempty" mapstructure:"business-view,omitempty" json:"business-view,omitempty"`
-	StateType      StateType          `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	OutTransitions []Transition       `yaml:"transitions,omitempty" mapstructure:"transitions,omitempty" json:"transitions,omitempty"`
-	Actions        []ActionDefinition `yaml:"in-actions,omitempty" mapstructure:"in-actions,omitempty" json:"in-actions,omitempty"`
+	Code        string `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
+	Description string `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	// Help                     string              `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	BusinessView   CodeDescriptionPair `yaml:"business-view,omitempty" mapstructure:"business-view,omitempty" json:"business-view,omitempty"`
+	StateType      StateType           `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	OutTransitions []Transition        `yaml:"transitions,omitempty" mapstructure:"transitions,omitempty" json:"transitions,omitempty"`
+	Actions        []ActionDefinition  `yaml:"in-actions,omitempty" mapstructure:"in-actions,omitempty" json:"in-actions,omitempty"`
+	Help           CodeDescriptionPair `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
 }
 
 type Rule struct {
-	Expression string `yaml:"expr,omitempty" mapstructure:"expr,omitempty" json:"expr,omitempty"`
-	Help       string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	Expression string              `yaml:"expr,omitempty" mapstructure:"expr,omitempty" json:"expr,omitempty"`
+	Help       CodeDescriptionPair `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
 }
 
 type Property struct {
-	Name           string `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
-	ValidationRule string `yaml:"validation-rule,omitempty" mapstructure:"validation-rule,omitempty" json:"validation-rule,omitempty"`
-	Help           string `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	Name           string              `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	ValidationRule string              `yaml:"validation-rule,omitempty" mapstructure:"validation-rule,omitempty" json:"validation-rule,omitempty"`
+	Help           CodeDescriptionPair `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	Scope          string              `yaml:"scope,omitempty" mapstructure:"scope,omitempty" json:"scope,omitempty"`
 }
 
 type BearerRef struct {
@@ -87,8 +89,14 @@ type Transition struct {
 	Description           string                 `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 }
 
+type Diagram struct {
+	ContentType string `yaml:"content-type,omitempty" mapstructure:"content-type,omitempty" json:"content-type,omitempty"`
+	Data        string `yaml:"data,omitempty" mapstructure:"data,omitempty" json:"data,omitempty"`
+}
+
 type StateMachine struct {
-	States []StateDefinition `yaml:"states,omitempty" mapstructure:"states,omitempty" json:"states,omitempty"`
+	Diagram *Diagram          `yaml:"diagram,omitempty" mapstructure:"diagram,omitempty" json:"diagram,omitempty"`
+	States  []StateDefinition `yaml:"states,omitempty" mapstructure:"states,omitempty" json:"states,omitempty"`
 }
 
 func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error) {
