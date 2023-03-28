@@ -32,7 +32,7 @@ const (
 )
 
 var tokenContextTestCase001 = tokensclient.TokenContext{
-	Id:        "BPMIFI",
+	Id:        "BPMGM1",
 	Pkey:      tokensclient.ContextPartitionKey,
 	Platform:  "BP",
 	Version:   tokensclient.TokenContextBaseVersion,
@@ -160,19 +160,19 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 								Name:           ParamNameNumeroPratica,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il numero della pratica e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 							{
 								Name:           ParamNameServizio,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il codice del servizio e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 							{
 								Name:           ParamNameNumero,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il numero del conto e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 						},
 						Rules: []tokensclient.Rule{
@@ -287,6 +287,15 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				Code:        MGMStatusPrimoContoAperto,
 				StateType:   tokensclient.StateStd,
 				Description: "Il primo conto e' stato aperto con successo, il codice puo' essere ora utilizzato da un codice fiscale presentato dall'assegnatario del codice",
+				Actions: []tokensclient.ActionDefinition{
+					{
+						ActionId:   "in-action-verifica-15-cf",
+						ActionType: tokensclient.ActionTypeIn,
+						Properties: map[string]interface{}{
+							ParamNameCf: InputParamCf,
+						},
+					},
+				},
 				OutTransitions: []tokensclient.Transition{
 					{
 						To: MGMStatusInAttesaAperturaSecondoConto,
@@ -320,19 +329,19 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 								Name:           ParamNameNumeroPratica,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il numero della pratica e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 							{
 								Name:           ParamNameServizio,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il codice del servizio e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 							{
 								Name:           ParamNameNumero,
 								ValidationRule: "required",
 								Help:           tokensclient.CodeDescriptionPair{Description: "il numero del conto e' obbligatorio"},
-								Scope:          "use",
+								Scope:          string(tokensclient.EventTypeNext),
 							},
 						},
 						Bearers: []tokensclient.BearerRef{

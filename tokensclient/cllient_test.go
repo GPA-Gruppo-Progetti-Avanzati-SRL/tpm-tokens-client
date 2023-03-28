@@ -104,7 +104,7 @@ func TestTokenClient(t *testing.T) {
 }
 
 func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.TokenContext) {
-	tokenContextTestCase.Id = "BPMIFI"
+	tokenContextTestCase.Id = "BPMGM1"
 	apiRequestNew := tokensclient.TokenApiRequest{
 		CustomData: map[string]interface{}{
 			"ssn":     "MPRMLS62S21G337J",
@@ -169,7 +169,7 @@ func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContext
 
 var bearerTestCase001 = tokensclient.Bearer{
 	Pkey:           "MINNIE",
-	TokenContextId: "BPMIFI",
+	TokenContextId: "BPMGM1",
 	Properties:     nil,
 }
 
