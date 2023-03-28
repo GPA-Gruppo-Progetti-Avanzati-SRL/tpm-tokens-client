@@ -6,14 +6,22 @@ import (
 )
 
 const (
-	ParamNameCf            = "cf"
-	ParamNameCanale        = "canale"
-	ParamNameFunnelId      = "funnelId"
-	ParamNameProdotto      = "prodotto"
-	ParamNameFase          = "fase"
-	ParamNameServizio      = "servizio"
-	ParamNameNumero        = "numero"
-	ParamNameNumeroPratica = "numeroPratica"
+	ParamNameCf                   = "cf"
+	ParamCfHelpMessage            = "il codice fiscale e' obbligatorio"
+	ParamNameCanale               = "canale"
+	ParamCanaleHelpMessage        = "il canale e' obbligatorio"
+	ParamNameFunnelId             = "funnelId"
+	ParamFunnelIdHelpMessage      = "il funnelId e' obbligatorio"
+	ParamNameProdotto             = "prodotto"
+	ParamProdottoHelpMessage      = "il prodotto e' obbligatorio"
+	ParamNameFase                 = "fase"
+	ParamFaseHelpMessage          = "la fase e' obbligatoria"
+	ParamNameServizio             = "servizio"
+	ParamServizioHelpMessage      = "il servizio e' obbligatoria"
+	ParamNameNumero               = "numero"
+	ParamNumeroHelpMessage        = "il numero conto e' obbligatoria"
+	ParamNameNumeroPratica        = "numeroPratica"
+	ParamNumeroPraticaHelpMessage = "il numero pratica e' obbligatoria"
 
 	InputParamCf         = "{$." + ParamNameCf + "}"
 	InputParamCanale     = "{$." + ParamNameCanale + "}"
@@ -30,6 +38,11 @@ const (
 	MGMStatusInAttesaAperturaSecondoConto = "in-attesa-apertura-secondo-conto"
 	MGMStatusBruciato                     = "bruciato"
 	MGMStatusExpired                      = "expired"
+
+	CodiceNonUtilizzabile = "codice-non-utilizzabile"
+
+	BearerCF1ReferenceVariable = "{v:cf1}"
+	BearerCF2ReferenceVariable = "{v:cf2}"
 )
 
 // This file is being separated from the actual tests because in the current state of affairs it has to be aligned with the tokensazstore package one and the client one.
@@ -111,12 +124,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il codice fiscale e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
@@ -178,44 +191,44 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il codice fiscale e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 								{
 									Name:           ParamNameCanale,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il canale e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
 								},
 								{
 									Name:           ParamNameProdotto,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il prodotto e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
 								},
 								{
 									Name:           ParamNameFase,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "la fase e' obbligatoria"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamFaseHelpMessage},
 								},
 								{
 									Name:           ParamNameFunnelId,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "l'identificativo del funnel e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
 								},
 								{
 									Name:           ParamNameNumeroPratica,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il numero della pratica e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 								{
 									Name:           ParamNameServizio,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il codice del servizio e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamServizioHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 								{
 									Name:           ParamNameNumero,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il numero del conto e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 							},
@@ -227,7 +240,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
@@ -279,7 +292,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 					StateType:   tokensclient.StateStd,
 					Description: "il sistema e' in attesa del perfezionamento della pratica relativa al primo conto corrente",
 					Help: tokensclient.CodeDescriptionPair{
-						Code:        "codice-non-utilizzabile",
+						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito non e' ancora stato attivato",
 					},
 					OutTransitions: []tokensclient.Transition{
@@ -299,7 +312,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
@@ -315,7 +328,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
@@ -347,54 +360,54 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il codice fiscale e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 								{
 									Name:           ParamNameCanale,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il canale e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
 								},
 								{
 									Name:           ParamNameProdotto,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il prodotto e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
 								},
 								{
 									Name:           ParamNameFase,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "la fase e' obbligatoria"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamFaseHelpMessage},
 								},
 								{
 									Name:           ParamNameFunnelId,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "l'identificativo del funnel e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
 								},
 								{
 									Name:           ParamNameNumeroPratica,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il numero della pratica e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 								{
 									Name:           ParamNameServizio,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il codice del servizio e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamServizioHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 								{
 									Name:           ParamNameNumero,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: "il numero del conto e' obbligatorio"},
+									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
 									Scope:          string(tokensclient.EventTypeNext),
 								},
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 								{
-									Id:   "{v:cf2}",
+									Id:   BearerCF2ReferenceVariable,
 									Role: "secondary",
 								},
 							},
@@ -444,7 +457,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 								{
 									Expression: "\"{$.cf}\" != \"{v:cf1}\"",
 									Help: tokensclient.CodeDescriptionPair{
-										Description: "il codice fiscale dell'utilizzatore {$.cf} deve essere diverso dal codice fiscale dell'assegnatario del codice {v:cf2}",
+										Description: "il codice fiscale dell'utilizzatore {$.cf} deve essere diverso dal codice fiscale dell'assegnatario del codice {v:cf1}",
 									},
 								},
 							},
@@ -456,7 +469,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 					StateType:   tokensclient.StateStd,
 					Description: "il sistema e' in attesa del perfezionamento della pratica del secondo conto",
 					Help: tokensclient.CodeDescriptionPair{
-						Code:        "codice-non-utilizzabile",
+						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito e' stato gia' usato e in attesa di lavorazione",
 					},
 					OutTransitions: []tokensclient.Transition{
@@ -470,11 +483,11 @@ var campaignTestCase001 = campaignclient.Campaign{
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 								{
-									Id:   "{v:cf2}",
+									Id:   BearerCF2ReferenceVariable,
 									Role: "secondary",
 								},
 							},
@@ -494,7 +507,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							},
 							Bearers: []tokensclient.BearerRef{
 								{
-									Id:   "{v:cf1}",
+									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
@@ -511,7 +524,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 					StateType:   tokensclient.StateFinal,
 					Description: "il codice e' stato utilizzato",
 					Help: tokensclient.CodeDescriptionPair{
-						Code:        "codice-non-utilizzabile",
+						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito e' gia' stato utilizzato",
 					},
 
@@ -522,7 +535,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 					StateType:   tokensclient.StateExpired,
 					Description: "il codice inserito è scaduto e non più utilizzabile",
 					Help: tokensclient.CodeDescriptionPair{
-						Code:        "codice-non-utilizzabile",
+						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito è scaduto e non più utilizzabile",
 					},
 				},
