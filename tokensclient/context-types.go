@@ -27,6 +27,48 @@ type Timeline struct {
 	ExpirationMode string `yaml:"expiration-mode,omitempty" mapstructure:"expiration-mode,omitempty" json:"expiration-mode,omitempty"`
 }
 
+func (tl *Timeline) IsOver() bool {
+	today := time.Now().Format("20060102")
+	if today > tl.EndDate {
+		return true
+	}
+
+	return false
+}
+
+func (tl *Timeline) IsNotStartedYet() bool {
+	today := time.Now().Format("20060102")
+	if today < tl.StartDate {
+		return true
+	}
+
+	return false
+}
+
+func (tl *Timeline) IsInRange() bool {
+	today := time.Now().Format("20060102")
+	if today >= tl.StartDate && today <= tl.EndDate {
+		return true
+	}
+
+	return false
+}
+
+func (tl *Timeline) NumberOfDays() (int, error) {
+	end, err := time.Parse("20060102", tl.EndDate)
+	if err != nil {
+		return -1, err
+	}
+
+	start, err := time.Parse("20060102", tl.StartDate)
+	if err != nil {
+		return -1, err
+	}
+
+	numDays := end.Sub(start).Hours() / 24.0
+	return int(numDays), nil
+}
+
 func (tl *Timeline) Valid() bool {
 
 	const semLogContext = "context timeline validation"
@@ -119,12 +161,7 @@ func (ctx *TokenContext) Valid() bool {
 }
 
 func (ctx *TokenContext) IsActive() bool {
-	today := time.Now().Format("20060102")
-	if today >= ctx.Timeline.StartDate && today <= ctx.Timeline.EndDate {
-		return true
-	}
-
-	return false
+	return ctx.Timeline.IsInRange()
 }
 
 func (ctx *TokenContext) EvaluateInActions(tok *Token, params map[string]interface{}) ([]Action, error) {

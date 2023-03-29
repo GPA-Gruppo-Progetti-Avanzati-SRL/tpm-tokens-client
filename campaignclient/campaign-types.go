@@ -30,8 +30,8 @@ type ProductInfo struct {
 type TokenMode string
 
 const (
-	TokenModeBatch  = "batch"
-	TokenModeOnline = "online"
+	TokenModeBatch  TokenMode = "batch"
+	TokenModeOnline TokenMode = "online"
 )
 
 type Type struct {
