@@ -3,7 +3,7 @@ package tokensclient
 import "github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 
 const (
-	BearerIdPathPlaceHolder       = "{bearer-id}"
+	ActorIdPathPlaceHolder        = "{actor-id}"
 	TokenContextIdPathPlaceHolder = "{context-id}"
 	TokenIdPathPlaceHolder        = "{token-id}"
 
@@ -24,12 +24,12 @@ const (
 	TokenRollback = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/rollback"
 
 	BearerBasePath                       = "/api/v1/bearers"
-	BearerContextGet                     = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
-	BearerContextPost                    = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
-	BearerContextPut                     = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
-	BearerContextDelete                  = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
-	AddToken2BearerInContextPost         = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
-	RemoveTokenFromBearerInContextDelete = BearerBasePath + "/" + BearerIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
+	BearerContextGet                     = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
+	BearerContextPost                    = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
+	BearerContextPut                     = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
+	BearerContextDelete                  = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
+	AddToken2BearerInContextPost         = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
+	RemoveTokenFromBearerInContextDelete = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
 )
 
 type HostInfo struct {

@@ -22,6 +22,7 @@ type Bearer struct {
 	Id             string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	Pkey           string                 `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
 	TokenContextId string                 `yaml:"tok-ctx-id,omitempty" mapstructure:"tok-ctx-id,omitempty" json:"tok-ctx-id,omitempty"`
+	ActorId        string                 `yaml:"actor-id,omitempty" mapstructure:"actor-id,omitempty" json:"actor-id,omitempty"`
 	Origin         string                 `yaml:"origin,omitempty" mapstructure:"origin,omitempty" json:"origin,omitempty"`
 	TokenRefs      []TokenRef             `yaml:"tok-refs,omitempty" mapstructure:"tok-refs,omitempty" json:"tok-refs,omitempty"`
 	Properties     map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
