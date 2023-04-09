@@ -111,7 +111,7 @@ func (c *Client) NewTokenIdUrl(apiPath string, ctxId string, qParams []har.NameV
 	sb.WriteString(c.host.HostName)
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
-	apiPath = strings.Replace(apiPath, "{context-id}", ctxId, 1)
+	sb.WriteString(strings.Replace(apiPath, "{context-id}", ctxId, 1))
 
 	if len(qParams) > 0 {
 		sb.WriteString("?")
