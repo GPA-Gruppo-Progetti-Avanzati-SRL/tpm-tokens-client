@@ -47,7 +47,10 @@ func (c *Client) NewId(reqCtx ApiRequestContext, ctxId string, unique bool, act 
 	ep := c.NewTokenIdUrl(urlPath, ctxId, nil)
 	ct := ContentTypeApplicationJson
 
-	b, err := json.Marshal(act)
+	newTokenRequest := NewTokenRequest{
+		Properties: act,
+	}
+	b, err := json.Marshal(newTokenRequest)
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}

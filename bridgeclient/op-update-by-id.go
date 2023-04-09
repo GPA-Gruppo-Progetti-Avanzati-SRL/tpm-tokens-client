@@ -19,7 +19,6 @@ const (
 type UpdateTokenRequest struct {
 	TokenContextId string                 `mapstructure:"context-id,omitempty"  json:"context-id,omitempty" yaml:"context-id,omitempty"`
 	TokenId        string                 `mapstructure:"token-id,omitempty"  json:"token-id,omitempty" yaml:"token-id,omitempty"`
-	Unique         bool                   `mapstructure:"unique"  json:"unique" yaml:"unique"`
 	Properties     map[string]interface{} `mapstructure:"properties,omitempty"  json:"properties,omitempty" yaml:"custom,omitempty"`
 }
 
@@ -43,7 +42,10 @@ func (c *Client) UpdateToken(reqCtx ApiRequestContext, ctxId string, tokenId str
 	ep := c.UpdateTokenUrl(urlPath, ctxId, tokenId, nil)
 	ct := ContentTypeApplicationJson
 
-	b, err := json.Marshal(act)
+	updateTokenRequest := UpdateTokenRequest{
+		Properties: act,
+	}
+	b, err := json.Marshal(updateTokenRequest)
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}

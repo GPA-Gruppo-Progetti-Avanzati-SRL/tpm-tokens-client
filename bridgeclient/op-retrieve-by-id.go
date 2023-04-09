@@ -19,7 +19,6 @@ const (
 type RetrieveTokenRequest struct {
 	TokenContextId string                 `mapstructure:"context-id,omitempty"  json:"context-id,omitempty" yaml:"context-id,omitempty"`
 	TokenId        string                 `mapstructure:"token-id,omitempty"  json:"token-id,omitempty" yaml:"token-id,omitempty"`
-	Unique         bool                   `mapstructure:"unique"  json:"unique" yaml:"unique"`
 	Properties     map[string]interface{} `mapstructure:"properties,omitempty"  json:"properties,omitempty" yaml:"custom,omitempty"`
 }
 
@@ -43,7 +42,10 @@ func (c *Client) RetrieveToken(reqCtx ApiRequestContext, ctxId string, tokenId s
 	ep := c.RetrieveTokenUrl(urlPath, ctxId, tokenId, nil)
 	ct := ContentTypeApplicationJson
 
-	b, err := json.Marshal(act)
+	retrieveTokenRequest := RetrieveTokenRequest{
+		Properties: act,
+	}
+	b, err := json.Marshal(retrieveTokenRequest)
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}
