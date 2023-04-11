@@ -72,6 +72,15 @@ type Event struct {
 	Bearers          []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 }
 
+func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bool) {
+	for _, a := range evt.Actions {
+		if a.ActionType == actionType && a.ActionId == actionId {
+			return a, true
+		}
+	}
+	return Action{}, false
+}
+
 type Token struct {
 	Pkey     string                 `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
 	Id       string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
