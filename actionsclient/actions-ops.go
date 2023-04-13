@@ -32,27 +32,28 @@ func (lks *LinkedService) NewClientById(id string, expressionCtx *expression.Con
 func (lks *LinkedService) NewClient(cfg Config, expressionCtx *expression.Context, opts ...restclient.Option) (*Client, error) {
 	const semLogContext = semLogContextBase + "::new"
 
+	resolvedCfg := cfg
 	if expressionCtx != nil {
 		v, err := expressionCtx.EvalOne(cfg.Path)
 		if err != nil {
 			return nil, err
 		}
-		cfg.Path = fmt.Sprint(v)
+		resolvedCfg.Path = fmt.Sprint(v)
 
 		for i := range cfg.Headers {
 			v, err := expressionCtx.EvalOne(cfg.Headers[i].Value)
 			if err != nil {
 				return nil, err
 			}
-			cfg.Headers[i].Value = fmt.Sprint(v)
+			resolvedCfg.Headers = append(resolvedCfg.Headers, restclient.Header{Name: cfg.Headers[i].Name, Value: fmt.Sprint(v)})
 		}
 	}
 
-	client := restclient.NewClient(&cfg.Config, opts...)
+	client := restclient.NewClient(&resolvedCfg.Config, opts...)
 
 	h := cfg.Host.FixValues()
 	log.Trace().Str("scheme", h.Scheme).Int("port", h.Port).Str("host-name", h.HostName).Msg(semLogContext)
-	return &Client{client: client, host: h, method: cfg.Method, path: cfg.Path, useResponse: cfg.Type == ActionTypeEnrich}, nil
+	return &Client{client: client, host: h, method: resolvedCfg.Method, path: resolvedCfg.Path, useResponse: resolvedCfg.Type == ActionTypeEnrich}, nil
 }
 
 func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{}) (map[string]interface{}, error) {
