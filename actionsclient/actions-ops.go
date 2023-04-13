@@ -40,6 +40,7 @@ func (lks *LinkedService) NewClient(cfg Config, expressionCtx *expression.Contex
 		}
 		resolvedCfg.Path = fmt.Sprint(v)
 
+		resolvedCfg.Headers = nil
 		for i := range cfg.Headers {
 			v, err := expressionCtx.EvalOne(cfg.Headers[i].Value)
 			if err != nil {
