@@ -4,16 +4,18 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog/log"
 )
 
 type ApiRequestContext struct {
-	XAPIKey   string           `yaml:"x-api-key,omitempty" mapstructure:"x-api-key,omitempty" json:"x-api-key,omitempty"`
-	RequestId string           `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
-	LRAId     string           `yaml:"lra-id,omitempty" mapstructure:"lra-id,omitempty" json:"lra-id,omitempty"`
-	Span      opentracing.Span `yaml:"-" mapstructure:"-" json:"-"`
-	HarSpan   hartracing.Span  `yaml:"-" mapstructure:"-" json:"-"`
+	XAPIKey   string              `yaml:"x-api-key,omitempty" mapstructure:"x-api-key,omitempty" json:"x-api-key,omitempty"`
+	RequestId string              `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
+	LRAId     string              `yaml:"lra-id,omitempty" mapstructure:"lra-id,omitempty" json:"lra-id,omitempty"`
+	Headers   []restclient.Header `mapstructure:"headers,omitempty" json:"headers,omitempty" yaml:"headers,omitempty"`
+	Span      opentracing.Span    `yaml:"-" mapstructure:"-" json:"-"`
+	HarSpan   hartracing.Span     `yaml:"-" mapstructure:"-" json:"-"`
 }
 
 type APIRequestContextOption func(*ApiRequestContext)
@@ -74,6 +76,12 @@ func ApiRequestWithHarSpan(span hartracing.Span) APIRequestContextOption {
 	}
 }
 
+func ApiRequestWithHeader(n, v string) APIRequestContextOption {
+	return func(ctx *ApiRequestContext) {
+		ctx.Headers = append(ctx.Headers, restclient.Header{Name: n, Value: v})
+	}
+}
+
 func (arc *ApiRequestContext) getHeaders(ct string) []har.NameValuePair {
 
 	const semLogContext = "tpm-tokens-client::get-headers"
@@ -96,6 +104,9 @@ func (arc *ApiRequestContext) getHeaders(ct string) []har.NameValuePair {
 		nvp = append(nvp, har.NameValuePair{Name: ContentTypeHeaderName, Value: ct})
 	}
 
+	for _, h := range arc.Headers {
+		nvp = append(nvp, har.NameValuePair{Name: h.Name, Value: h.Value})
+	}
 	return nvp
 }
 

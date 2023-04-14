@@ -191,7 +191,7 @@ func TestBearerClient(t *testing.T) {
 	harTracingSpan := hartracing.GlobalTracer().StartSpan()
 	defer harTracingSpan.Finish()
 
-	cli, err := tokensclient.NewTokensApiClient(&cliConfig, restclient.WithHarSpan(harTracingSpan))
+	cli, err := tokensclient.NewTokensApiClient(&cliConfig, restclient.WithHarTracingEnabled(true), restclient.WithHarSpan(harTracingSpan))
 	require.NoError(t, err)
 	defer cli.Close()
 
@@ -199,7 +199,9 @@ func TestBearerClient(t *testing.T) {
 }
 
 func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.Bearer) {
-	apiRequestCtx := tokensclient.NewApiRequestContext(tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"))
+	apiRequestCtx := tokensclient.NewApiRequestContext(
+		tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"),
+		tokensclient.ApiRequestWithHeader("X-Header-Name", "X-Header-Value"))
 
 	bearerRequest := tokensclient.BearerApiRequest{
 		Origin: "test",
@@ -209,6 +211,11 @@ func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContex
 	ber, err := cli.AddBearer2Context(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, &bearerRequest, "")
 	require.NoError(t, err)
 	t.Log(ber)
+
+	// Remove an header from here
+	apiRequestCtx = tokensclient.NewApiRequestContext(
+		tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"),
+	)
 
 	bearerRequest.Properties = map[string]interface{}{"first-name": "PAOLINO"}
 	ber, err = cli.UpdateBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, &bearerRequest, "")
