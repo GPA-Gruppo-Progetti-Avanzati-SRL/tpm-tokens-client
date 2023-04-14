@@ -23,8 +23,7 @@ func (t *Token) String() string {
 }
 
 type ProductInfo struct {
-	Code  string `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
-	Ambit string `yaml:"ambit,omitempty" mapstructure:"ambit,omitempty" json:"ambit,omitempty"`
+	Code string `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 }
 
 type TokenMode string
