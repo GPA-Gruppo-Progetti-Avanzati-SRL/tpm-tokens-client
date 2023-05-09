@@ -7,6 +7,7 @@ import (
 )
 
 type EventType string
+type TokenType string
 
 const (
 	EventTypeCreate     EventType = "create"
@@ -14,6 +15,9 @@ const (
 	EventTypeCommit     EventType = "commit"
 	EventTypeRollback   EventType = "rollback"
 	EventTypeExpiration EventType = "expired"
+
+	TokenTypeStd    TokenType = "std"
+	TokenTypeBanner TokenType = "banner"
 )
 
 var NilTokenId = ""
@@ -84,6 +88,7 @@ func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bo
 type Token struct {
 	Pkey     string                 `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
 	Id       string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Typ      TokenType              `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	CtxId    string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
 	Events   []Event                `yaml:"events,omitempty" mapstructure:"events,omitempty" json:"events,omitempty"`
 	Metadata map[string]interface{} `yaml:"metadata,omitempty" mapstructure:"metadata,omitempty" json:"metadata,omitempty"`

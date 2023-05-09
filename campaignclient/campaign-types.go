@@ -36,7 +36,6 @@ const (
 type Type struct {
 	Code           string        `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 	Description    string        `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	BannerTokenId  string        `yaml:"banner-token-id,omitempty" mapstructure:"banner-token-id,omitempty" json:"banner-token-id,omitempty"`
 	Unique         bool          `yaml:"unique,omitempty" mapstructure:"unique,omitempty" json:"unique,omitempty"`
 	PromoCode      string        `yaml:"promo,omitempty" mapstructure:"promo,omitempty" json:"promo,omitempty"`
 	TokenMode      TokenMode     `yaml:"token-mode,omitempty" mapstructure:"token-mode,omitempty" json:"token-mode,omitempty"`
@@ -59,6 +58,7 @@ type LinkedResource struct {
 	ContentType string                   `yaml:"content-type,omitempty" mapstructure:"content-type,omitempty" json:"content-type,omitempty"`
 	Locations   []LinkedResourceLocation `yaml:"locations,omitempty" mapstructure:"locations,omitempty" json:"locations,omitempty"`
 	Help        string                   `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
+	Properties  map[string]interface{}   `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 }
 
 type Filters struct {

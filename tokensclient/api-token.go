@@ -13,6 +13,7 @@ import (
 
 type TokenApiRequest struct {
 	TokenId       string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
+	Typ           TokenType              `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	CustomData    map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	CheckOnlyFLag bool                   `yaml:"check-only,omitempty" mapstructure:"check-only,omitempty" json:"check-only,omitempty"`
 }

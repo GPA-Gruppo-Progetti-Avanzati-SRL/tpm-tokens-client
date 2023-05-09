@@ -56,11 +56,10 @@ var campaignTestCase001 = campaignclient.Campaign{
 		Fase:     "Apertura",
 	},
 	CampaignType: campaignclient.Type{
-		Code:          "MGM",
-		Description:   "member get member",
-		BannerTokenId: "BPMIFI-BANNER",
-		Unique:        true,
-		PromoCode:     "CPQ promo code",
+		Code:        "MGM",
+		Description: "member get member",
+		Unique:      true,
+		PromoCode:   "CPQ promo code",
 		//TargetProducts: []campaignclient.ProductInfo{
 		//	{
 		//		Code:  "Codice prodotto interessato alla campagna (es. Start)",
@@ -89,11 +88,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 		},
 	},
 	TokenContext: tokensclient.TokenContext{
-		Id:        "BPMGM1",
-		Pkey:      tokensclient.ContextPartitionKey,
-		Platform:  "BP",
-		Version:   tokensclient.TokenContextBaseVersion,
-		Suspended: false,
+		Id:            "BPMGM1",
+		Pkey:          tokensclient.ContextPartitionKey,
+		Platform:      "BP",
+		Version:       tokensclient.TokenContextBaseVersion,
+		Suspended:     false,
+		BannerTokenId: "BPMIFI-BANNER",
 		Timeline: tokensclient.Timeline{
 			StartDate:      "20230101",
 			EndDate:        "20230430",

@@ -113,6 +113,7 @@ type TokenContext struct {
 	Platform            string               `yaml:"platform,omitempty" mapstructure:"platform,omitempty" json:"platform,omitempty"`
 	Version             string               `yaml:"version,omitempty" mapstructure:"version,omitempty" json:"version,omitempty"`
 	Suspended           bool                 `yaml:"suspended,omitempty" mapstructure:"suspended,omitempty" json:"suspended,omitempty"`
+	BannerTokenId       string               `yaml:"banner-token-id,omitempty" mapstructure:"banner-token-id,omitempty" json:"banner-token-id,omitempty"`
 	Timeline            Timeline             `yaml:"timeline,omitempty" mapstructure:"timeline,omitempty" json:"timeline,omitempty"`
 	StateMachine        StateMachine         `yaml:"state-machine,omitempty" mapstructure:"state-machine,omitempty" json:"state-machine,omitempty"`
 	TokenIdProviderType *TokenIdProviderType `yaml:"token-id-provider-type,omitempty" mapstructure:"token-id-provider-type,omitempty" json:"token-id-provider-type,omitempty"`
