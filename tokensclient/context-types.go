@@ -19,6 +19,8 @@ const (
 	ExpirationModeDate      = "date"
 
 	TokenContextBaseVersion = "v1.0.0"
+
+	SysParamNameTokenContextId = "_ctxId"
 )
 
 type Timeline struct {

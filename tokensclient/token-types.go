@@ -18,6 +18,8 @@ const (
 
 	TokenTypeStd    TokenType = "std"
 	TokenTypeBanner TokenType = "banner"
+
+	SysParamNameTokenId = "_tokId"
 )
 
 var NilTokenId = ""

@@ -1,9 +1,9 @@
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.1 h1:QCIjnTNzNlkw6qZQ3pmuuwv+xbTUUVBRXA4fVA1kncQ=
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.1/go.mod h1:WZLFgy+qbyanFBP25v+0WVvcqgYJHCeqsRmVSWXMC2o=
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.0.25 h1:d9454/5PRozaInD79evwW8VHO2MCM7P/PqAO4sF24qw=
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.0.25/go.mod h1:ytG0RinPzkdBt3Lule2u5T+V6S5SgSOp3QVDZe2V1Bs=
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.0.25 h1:KuoTM2UETXGLhbmoLJjHppA2myej1H/L4e+IBpUciyU=
-github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.0.25/go.mod h1:61ukJOI7Bv3HLMIgpcZrjylG/ijKhzC2g8vUNa2GWYg=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.3 h1:M7UYdIlu16uTDuYXMLDOM7Tp1nZw+jeCPgb8mAUY98I=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.3/go.mod h1:WZLFgy+qbyanFBP25v+0WVvcqgYJHCeqsRmVSWXMC2o=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.0.26 h1:KoqZD3SFg37EI4ZpCHMixRWnZ6qJGm1UO3OUQLmVTrw=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.0.26/go.mod h1:0P3O8FXDC2RudFGuQ/+XPMH/EnVrge+H3g57oD20n2o=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.0.26 h1:CNLStgIa34VfVjznXT2RQaRiFinEDyX6DB0594pMZlA=
+github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.0.26/go.mod h1:5H/Y+Qj2TYM9tS6mu0MGU8tzh1HXhh77E/NMmU79IJk=
 github.com/HdrHistogram/hdrhistogram-go v1.1.2 h1:5IcZpTvzydCQeHzK4Ef/D5rrSqwxob0t8PQPMybUNFM=
 github.com/PaesslerAG/gval v1.0.0 h1:GEKnRwkWDdf9dOmKcNrar9EA1bz1z9DqPIO1+iLzhd8=
 github.com/PaesslerAG/gval v1.0.0/go.mod h1:y/nm5yEyTeX6av0OfKJNp9rBNj2XrGhAf5+v24IBN1I=
