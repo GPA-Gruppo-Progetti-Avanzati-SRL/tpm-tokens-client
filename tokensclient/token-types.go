@@ -67,15 +67,16 @@ type State struct {
 type ProcessVars map[string]interface{}
 
 type Event struct {
-	RequestId        string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
-	EventDescription string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	EventType        EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	State            State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
-	Ts               string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
-	ExpiryTs         string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
-	Vars             ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
-	Actions          []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
-	Bearers          []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
+	RequestId   string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
+	Name        string      `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	Description string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Typ         EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	State       State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
+	Ts          string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
+	ExpiryTs    string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
+	Vars        ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
+	Actions     []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+	Bearers     []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 }
 
 func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bool) {

@@ -78,6 +78,7 @@ type BearerRef struct {
 }
 
 type Transition struct {
+	Name                  string                 `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
 	To                    string                 `yaml:"to,omitempty" mapstructure:"to,omitempty" json:"to,omitempty"`
 	Order                 int                    `yaml:"order,omitempty" mapstructure:"order,omitempty" json:"order,omitempty"`
 	Properties            []Property             `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
