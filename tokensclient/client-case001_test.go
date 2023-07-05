@@ -74,6 +74,7 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				*/
 				OutTransitions: []tokensclient.Transition{
 					{
+						Name:        "creazione",
 						To:          MGMStatusGenerato,
 						Description: "il codice e' stato creato per il cf: {v:cf1}",
 						Properties: []tokensclient.Property{
@@ -141,6 +142,7 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				*/
 				OutTransitions: []tokensclient.Transition{
 					{
+						Name:        "prenotazione",
 						To:          MGMStatusInAttesaAperturaPrimoConto,
 						Description: "Il codice e' stato usato da {v:cf1} e il sistema e in attesa di apertura del primo conto",
 						Properties: []tokensclient.Property{
@@ -253,6 +255,7 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				},
 				OutTransitions: []tokensclient.Transition{
 					{
+						Name:        "attivazione",
 						To:          MGMStatusPrimoContoAperto,
 						Description: "il perfezionamento della pratica {v:numeroPratica1} di apertura del conto {v:servizio1}-{v:numero1} è terminata con successo",
 						Properties: []tokensclient.Property{
@@ -274,6 +277,7 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 						},
 					},
 					{
+						Name:        "attivazione-fallita",
 						To:          MGMStatusGenerato,
 						Description: "il perfezionamento della pratica {v:numeroPratica1} di apertura del conto {v:servizio}-{v:numero} non e' andato a buon fine",
 						Properties: []tokensclient.Property{
@@ -311,7 +315,8 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				},
 				OutTransitions: []tokensclient.Transition{
 					{
-						To: MGMStatusInAttesaAperturaSecondoConto,
+						Name: "uso",
+						To:   MGMStatusInAttesaAperturaSecondoConto,
 						Properties: []tokensclient.Property{
 							{
 								Name:           ParamNameCf,
@@ -430,7 +435,8 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 				},
 				OutTransitions: []tokensclient.Transition{
 					{
-						To: MGMStatusBruciato,
+						Name: "bruciatura",
+						To:   MGMStatusBruciato,
 						Properties: []tokensclient.Property{
 							{
 								Name:           "result",
@@ -454,7 +460,8 @@ var tokenContextTestCase001 = tokensclient.TokenContext{
 						},
 					},
 					{
-						To: MGMStatusPrimoContoAperto,
+						Name: "bruciatura-fallita",
+						To:   MGMStatusPrimoContoAperto,
 						Properties: []tokensclient.Property{
 							{
 								Name:           "result",
