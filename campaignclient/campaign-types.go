@@ -3,7 +3,7 @@ package campaignclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"strings"
 	"time"
 )
@@ -70,13 +70,13 @@ type Filters struct {
 }
 
 type Campaign struct {
-	tokensclient.TokenContext `mapstructure:",squash"  yaml:",inline"`
-	Filters                   Filters          `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
-	CampaignType              Type             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	Title                     string           `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
-	Description               string           `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	AddInfo                   AdditionalInfo   `yaml:"additional-info,omitempty" mapstructure:"additional-info,omitempty" json:"additional-info,omitempty"`
-	Resources                 []LinkedResource `yaml:"resources,omitempty" mapstructure:"resources,omitempty" json:"resources,omitempty"`
+	token.TokenContext `mapstructure:",squash"  yaml:",inline"`
+	Filters            Filters          `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
+	CampaignType       Type             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Title              string           `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
+	Description        string           `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	AddInfo            AdditionalInfo   `yaml:"additional-info,omitempty" mapstructure:"additional-info,omitempty" json:"additional-info,omitempty"`
+	Resources          []LinkedResource `yaml:"resources,omitempty" mapstructure:"resources,omitempty" json:"resources,omitempty"`
 }
 
 func (c *Campaign) Info() CampaignInfo {
@@ -94,16 +94,16 @@ func (c *Campaign) Info() CampaignInfo {
 }
 
 type CampaignInfo struct {
-	Id           string                `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
-	Platform     string                `yaml:"platform,omitempty" mapstructure:"platform,omitempty" json:"platform,omitempty"`
-	Version      string                `yaml:"version,omitempty" mapstructure:"version,omitempty" json:"version,omitempty"`
-	Timeline     tokensclient.Timeline `yaml:"timeline,omitempty" mapstructure:"timeline,omitempty" json:"timeline,omitempty"`
-	Filters      Filters               `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
-	CampaignType Type                  `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	Title        string                `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
-	Description  string                `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	AddInfo      AdditionalInfo        `yaml:"additional-info,omitempty" mapstructure:"additional-info,omitempty" json:"additional-info,omitempty"`
-	Resources    []LinkedResource      `yaml:"resources,omitempty" mapstructure:"resources,omitempty" json:"resources,omitempty"`
+	Id           string           `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Platform     string           `yaml:"platform,omitempty" mapstructure:"platform,omitempty" json:"platform,omitempty"`
+	Version      string           `yaml:"version,omitempty" mapstructure:"version,omitempty" json:"version,omitempty"`
+	Timeline     token.Timeline   `yaml:"timeline,omitempty" mapstructure:"timeline,omitempty" json:"timeline,omitempty"`
+	Filters      Filters          `yaml:"filters,omitempty" mapstructure:"filters,omitempty" json:"filters,omitempty"`
+	CampaignType Type             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Title        string           `yaml:"title,omitempty" mapstructure:"title,omitempty" json:"title,omitempty"`
+	Description  string           `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	AddInfo      AdditionalInfo   `yaml:"additional-info,omitempty" mapstructure:"additional-info,omitempty" json:"additional-info,omitempty"`
+	Resources    []LinkedResource `yaml:"resources,omitempty" mapstructure:"resources,omitempty" json:"resources,omitempty"`
 }
 
 func (c *CampaignInfo) Accept(criteria *Filters) bool {
@@ -153,7 +153,7 @@ func checkFilter(val string, criteria string) bool {
 	return strings.ToLower(val) == criteria
 }
 
-func checkTiming(val tokensclient.Timeline, criteria string) bool {
+func checkTiming(val token.Timeline, criteria string) bool {
 	if criteria == "" {
 		return true
 	}

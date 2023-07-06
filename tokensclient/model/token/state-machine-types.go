@@ -1,8 +1,9 @@
-package tokensclient
+package token
 
 import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util/expression"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 )
 
 type StateType string
@@ -53,7 +54,6 @@ type StateDefinition struct {
 	Code        string `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 	Description string `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 	// Help                     string              `yaml:"help,omitempty" mapstructure:"help,omitempty" json:"help,omitempty"`
-	BusinessView   CodeDescriptionPair `yaml:"business-view,omitempty" mapstructure:"business-view,omitempty" json:"business-view,omitempty"`
 	StateType      StateType           `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	OutTransitions []Transition        `yaml:"transitions,omitempty" mapstructure:"transitions,omitempty" json:"transitions,omitempty"`
 	Actions        []ActionDefinition  `yaml:"in-actions,omitempty" mapstructure:"in-actions,omitempty" json:"in-actions,omitempty"`
@@ -107,7 +107,7 @@ func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error
 		}
 	}
 
-	return StateDefinition{}, NewTokError(TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
+	return StateDefinition{}, tokensclient.NewTokError(tokensclient.TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
 }
 
 func EvaluateActionDefinitions(actions []ActionDefinition, eCtx *expression.Context, actionType ActionType, takeFirstOnly bool) ([]Action, error) {
@@ -147,7 +147,7 @@ func EvalProperties(eCtx *expression.Context, propsDefinition map[string]interfa
 			pv[n], err = eCtx.EvalOne(s)
 
 			if err != nil {
-				return nil, NewTokError(TokenErrorExpressionEvaluation, err.Error())
+				return nil, tokensclient.NewTokError(tokensclient.TokenErrorExpressionEvaluation, err.Error())
 			}
 		}
 

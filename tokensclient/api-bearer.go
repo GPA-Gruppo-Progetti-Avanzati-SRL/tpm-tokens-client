@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"net/url"
@@ -13,12 +14,12 @@ import (
 
 type BearerApiRequest struct {
 	Origin     string                 `yaml:"origin,omitempty" mapstructure:"origin,omitempty" json:"origin,omitempty"`
-	TokenRefs  []TokenRef             `yaml:"tok-refs,omitempty" mapstructure:"tok-refs,omitempty" json:"tok-refs,omitempty"`
+	TokenRefs  []bearer.TokenRef      `yaml:"tok-refs,omitempty" mapstructure:"tok-refs,omitempty" json:"tok-refs,omitempty"`
 	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
-func (c *Client) GetBearerInContext(reqCtx ApiRequestContext, actorId, ctxId string) (*Bearer, error) {
+func (c *Client) GetBearerInContext(reqCtx ApiRequestContext, actorId, ctxId string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::get-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)
 
@@ -43,7 +44,7 @@ func (c *Client) GetBearerInContext(reqCtx ApiRequestContext, actorId, ctxId str
 	return resp, err
 }
 
-func (c *Client) AddBearer2Context(reqCtx ApiRequestContext, actorId, ctxId string, bearer *BearerApiRequest, ct string) (*Bearer, error) {
+func (c *Client) AddBearer2Context(reqCtx ApiRequestContext, actorId, ctxId string, bearer *BearerApiRequest, ct string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::add-bearer-2-ctx"
 	log.Trace().Msg(semLogContext)
 
@@ -84,7 +85,7 @@ func (c *Client) AddBearer2Context(reqCtx ApiRequestContext, actorId, ctxId stri
 	return resp, err
 }
 
-func (c *Client) UpdateBearerInContext(reqCtx ApiRequestContext, actorId, ctxId string, bearer *BearerApiRequest, ct string) (*Bearer, error) {
+func (c *Client) UpdateBearerInContext(reqCtx ApiRequestContext, actorId, ctxId string, bearer *BearerApiRequest, ct string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::update-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)
 
@@ -125,7 +126,7 @@ func (c *Client) UpdateBearerInContext(reqCtx ApiRequestContext, actorId, ctxId 
 	return resp, err
 }
 
-func (c *Client) RemoveBearerFromContext(reqCtx ApiRequestContext, actorId, ctxId string) (*Bearer, error) {
+func (c *Client) RemoveBearerFromContext(reqCtx ApiRequestContext, actorId, ctxId string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::remove-bearer-from-ctx"
 	log.Trace().Msg(semLogContext)
 
@@ -150,7 +151,7 @@ func (c *Client) RemoveBearerFromContext(reqCtx ApiRequestContext, actorId, ctxI
 	return resp, err
 }
 
-func (c *Client) AddToken2BearerInContext(reqCtx ApiRequestContext, actorId, ctxId, tokId string, role string) (*Bearer, error) {
+func (c *Client) AddToken2BearerInContext(reqCtx ApiRequestContext, actorId, ctxId, tokId string, role string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::add-token-2-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)
 
@@ -175,7 +176,7 @@ func (c *Client) AddToken2BearerInContext(reqCtx ApiRequestContext, actorId, ctx
 	return resp, err
 }
 
-func (c *Client) RemoveTokenFromBearerInContext(reqCtx ApiRequestContext, actorId, ctxId, tokId string) (*Bearer, error) {
+func (c *Client) RemoveTokenFromBearerInContext(reqCtx ApiRequestContext, actorId, ctxId, tokId string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::remove-token-from-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)
 

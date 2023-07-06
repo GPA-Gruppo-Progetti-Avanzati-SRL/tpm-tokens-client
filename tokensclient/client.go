@@ -4,6 +4,8 @@ import (
 	"errors"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
 )
@@ -55,7 +57,7 @@ func NewTokensApiClient(cfg *Config, opts ...restclient.Option) (*Client, error)
 	return &Client{client: client, host: h}, nil
 }
 
-func DeserializeTokenContextContentResponse(resp *har.Entry) (*TokenContext, error) {
+func DeserializeTokenContextContentResponse(resp *har.Entry) (*token.TokenContext, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-token-context-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
@@ -64,11 +66,11 @@ func DeserializeTokenContextContentResponse(resp *har.Entry) (*TokenContext, err
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	var resultObj *TokenContext
+	var resultObj *token.TokenContext
 	var err error
 	switch resp.Response.Status {
 	case http.StatusOK:
-		resultObj, err = DeserializeContext(resp.Response.Content.Data)
+		resultObj, err = token.DeserializeContext(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}
@@ -87,7 +89,7 @@ func DeserializeTokenContextContentResponse(resp *har.Entry) (*TokenContext, err
 	return resultObj, nil
 }
 
-func DeserializeBearerContentResponse(resp *har.Entry) (*Bearer, error) {
+func DeserializeBearerContentResponse(resp *har.Entry) (*bearer.Bearer, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-bearer-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
@@ -96,11 +98,11 @@ func DeserializeBearerContentResponse(resp *har.Entry) (*Bearer, error) {
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	var resultObj *Bearer
+	var resultObj *bearer.Bearer
 	var err error
 	switch resp.Response.Status {
 	case http.StatusOK:
-		resultObj, err = DeserializeBearer(resp.Response.Content.Data)
+		resultObj, err = bearer.DeserializeBearer(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}
@@ -119,7 +121,7 @@ func DeserializeBearerContentResponse(resp *har.Entry) (*Bearer, error) {
 	return resultObj, nil
 }
 
-func DeserializeTokenResponseBody(resp *har.Entry) (*Token, error) {
+func DeserializeTokenResponseBody(resp *har.Entry) (*token.Token, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-token-context-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
@@ -128,11 +130,11 @@ func DeserializeTokenResponseBody(resp *har.Entry) (*Token, error) {
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	var resultObj *Token
+	var resultObj *token.Token
 	var err error
 	switch resp.Response.Status {
 	case http.StatusOK:
-		resultObj, err = DeserializeToken(resp.Response.Content.Data)
+		resultObj, err = token.DeserializeToken(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}

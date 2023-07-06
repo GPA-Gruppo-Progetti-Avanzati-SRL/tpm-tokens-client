@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"net/url"
 	"strings"
 )
 
-func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*TokenContext, error) {
+func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*token.TokenContext, error) {
 	const semLogContext = "tpm-tokens-client::get-token-context"
 
 	ep := c.tokenContextApiUrl(TokenContextGet, ctxId, nil)
@@ -35,7 +36,7 @@ func (c *Client) GetTokenContextById(reqCtx ApiRequestContext, ctxId string) (*T
 	return resp, err
 }
 
-func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContext, ct string) (*TokenContext, error) {
+func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *token.TokenContext, ct string) (*token.TokenContext, error) {
 	const semLogContext = "tpm-tokens-client::new-token-context"
 
 	ep := c.tokenContextApiUrl(TokenContextNew, "", nil)
@@ -76,7 +77,7 @@ func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContex
 	return resp, err
 }
 
-func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *TokenContext, ct string) (*TokenContext, error) {
+func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *token.TokenContext, ct string) (*token.TokenContext, error) {
 	const semLogContext = "tpm-tokens-client::new-token-context"
 
 	ep := c.tokenContextApiUrl(TokenContextPut, tokenCtx.Id, nil)

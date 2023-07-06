@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"net/url"
@@ -13,7 +14,7 @@ import (
 
 type TokenApiRequest struct {
 	TokenId       string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
-	Typ           TokenType              `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Typ           token.TokenType        `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
 	CustomData    map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	CheckOnlyFLag bool                   `yaml:"check-only,omitempty" mapstructure:"check-only,omitempty" json:"check-only,omitempty"`
 }
@@ -22,7 +23,7 @@ func (tok *TokenApiRequest) ToJSON() ([]byte, error) {
 	return json.Marshal(tok)
 }
 
-func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
+func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::get-token"
 
 	ep := c.tokenApiUrl(GetToken, ctxId, tokId, nil)
@@ -47,7 +48,7 @@ func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) 
 	return resp, err
 }
 
-func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenApiRequest, ct string) (*Token, error) {
+func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::new-token"
 
 	op := "use"
@@ -117,7 +118,7 @@ func (c *Client) DeleteToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 	return resp, err
 }
 
-func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
+func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::commit-token"
 
 	ep := c.tokenApiUrl(TokenCommit, ctxId, tokId, nil)
@@ -142,7 +143,7 @@ func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 	return resp, err
 }
 
-func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*Token, error) {
+func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::commit-token"
 
 	ep := c.tokenApiUrl(TokenRollback, ctxId, tokId, nil)
@@ -167,7 +168,7 @@ func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId str
 	return resp, err
 }
 
-func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*Token, error) {
+func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-next"
 
 	ep := c.tokenApiUrl(TokenNext, ctxId, tokId, nil)
@@ -208,7 +209,7 @@ func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string,
 	return resp, err
 }
 
-func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*Token, error) {
+func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-check"
 
 	ep := c.tokenApiUrl(TokenCheck, ctxId, tokId, nil)

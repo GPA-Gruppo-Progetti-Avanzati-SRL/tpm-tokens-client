@@ -1,4 +1,4 @@
-package tokensclient
+package bearer
 
 import (
 	"encoding/json"

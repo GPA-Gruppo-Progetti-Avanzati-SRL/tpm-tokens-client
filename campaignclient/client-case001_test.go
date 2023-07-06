@@ -2,7 +2,7 @@ package campaignclient_test
 
 import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/campaignclient"
-	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 )
 
 const (
@@ -87,23 +87,23 @@ var campaignTestCase001 = campaignclient.Campaign{
 			Help: "Scarica il regolamento con tutte le informazioni della campagna",
 		},
 	},
-	TokenContext: tokensclient.TokenContext{
+	TokenContext: token.TokenContext{
 		Id:            "BPMGM1",
-		Pkey:          tokensclient.ContextPartitionKey,
+		Pkey:          token.ContextPartitionKey,
 		Platform:      "BP",
-		Version:       tokensclient.TokenContextBaseVersion,
+		Version:       token.TokenContextBaseVersion,
 		Suspended:     false,
 		BannerTokenId: "BPMIFI-BANNER",
-		Timeline: tokensclient.Timeline{
+		Timeline: token.Timeline{
 			StartDate:      "20230101",
 			EndDate:        "20230430",
-			ExpirationMode: tokensclient.ExpirationModeDate,
+			ExpirationMode: token.ExpirationModeDate,
 		},
-		StateMachine: tokensclient.StateMachine{
-			States: []tokensclient.StateDefinition{
+		StateMachine: token.StateMachine{
+			States: []token.StateDefinition{
 				{
 					Code:        "[*]",
-					StateType:   tokensclient.StartEndState,
+					StateType:   token.StartEndState,
 					Description: "description of start/end meta-state",
 					/* No out actions are required in here
 					Actions: []tokensclient.ActionDefinition{
@@ -116,37 +116,37 @@ var campaignTestCase001 = campaignclient.Campaign{
 						},
 					},
 					*/
-					OutTransitions: []tokensclient.Transition{
+					OutTransitions: []token.Transition{
 						{
 							To:          MGMStatusGenerato,
 							Description: "il codice e' stato creato per il cf: {v:cf1}",
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
-							ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
+							ProcessVarDefinitions: []token.ProcessVarDefinition{
 								{
 									Name:        "cf1",
 									Description: "codice fiscale utilizzatore",
 									Value:       InputParamCf,
 								},
 							},
-							TTL: tokensclient.TTLDefinition{
+							TTL: token.TTLDefinition{
 								Value: "1d",
 							},
-							Actions: []tokensclient.ActionDefinition{
+							Actions: []token.ActionDefinition{
 								{
-									ActionId:   tokensclient.ActionTypeNewId,
-									ActionType: tokensclient.ActionTypeNewId,
+									ActionId:   token.ActionTypeNewId,
+									ActionType: token.ActionTypeNewId,
 									Properties: map[string]interface{}{
 										ParamNameCf: InputParamCf,
 									},
@@ -166,12 +166,12 @@ var campaignTestCase001 = campaignclient.Campaign{
 				},
 				{
 					Code:        MGMStatusGenerato,
-					StateType:   tokensclient.StateStd,
+					StateType:   token.StateStd,
 					Description: "Il codice è in attesa di un primo utilizzo da parte del codice fiscale dell'assegnatario",
-					Actions: []tokensclient.ActionDefinition{
+					Actions: []token.ActionDefinition{
 						{
 							ActionId:   "in-action-verifica-15-cf",
-							ActionType: tokensclient.ActionTypeIn,
+							ActionType: token.ActionTypeIn,
 							Properties: map[string]interface{}{
 								ParamNameCf: InputParamCf,
 							},
@@ -183,68 +183,68 @@ var campaignTestCase001 = campaignclient.Campaign{
 						Description: "whatever description",
 					},
 					*/
-					OutTransitions: []tokensclient.Transition{
+					OutTransitions: []token.Transition{
 						{
 							To:          MGMStatusInAttesaAperturaPrimoConto,
 							Description: "Il codice e' stato usato da {v:cf1} e il sistema e in attesa di apertura del primo conto",
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 								{
 									Name:           ParamNameCanale,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
 								},
 								{
 									Name:           ParamNameProdotto,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
 								},
 								{
 									Name:           ParamNameFase,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamFaseHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamFaseHelpMessage},
 								},
 								{
 									Name:           ParamNameFunnelId,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
 								},
 								{
 									Name:           ParamNameNumeroPratica,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 								{
 									Name:           ParamNameServizio,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamServizioHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamServizioHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 								{
 									Name:           ParamNameNumero,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.cf}\" == \"{v:cf1}\"",
-									Help:       tokensclient.CodeDescriptionPair{Description: "Il codice inserito non risulta associato al cliente {$.cf} ma al cliente {v:cf1}"},
+									Help:       token.CodeDescriptionPair{Description: "Il codice inserito non risulta associato al cliente {$.cf} ma al cliente {v:cf1}"},
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
-							ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
+							ProcessVarDefinitions: []token.ProcessVarDefinition{
 								{
 									Name:        "numeroPratica1",
 									Description: "numero pratica apertura primo conto",
@@ -281,7 +281,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Value:       InputParamProdotto,
 								},
 							},
-							TTL: tokensclient.TTLDefinition{
+							TTL: token.TTLDefinition{
 								Value: "1d",
 							},
 						},
@@ -289,28 +289,28 @@ var campaignTestCase001 = campaignclient.Campaign{
 				},
 				{
 					Code:        MGMStatusInAttesaAperturaPrimoConto,
-					StateType:   tokensclient.StateStd,
+					StateType:   token.StateStd,
 					Description: "il sistema e' in attesa del perfezionamento della pratica relativa al primo conto corrente",
-					Help: tokensclient.CodeDescriptionPair{
+					Help: token.CodeDescriptionPair{
 						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito non e' ancora stato attivato",
 					},
-					OutTransitions: []tokensclient.Transition{
+					OutTransitions: []token.Transition{
 						{
 							To:          MGMStatusPrimoContoAperto,
 							Description: "il perfezionamento della pratica {v:numeroPratica1} di apertura del conto {v:servizio1}-{v:numero1} è terminata con successo",
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           "result",
 									ValidationRule: "required",
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.result}\" == \"OK\"",
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
@@ -320,19 +320,19 @@ var campaignTestCase001 = campaignclient.Campaign{
 						{
 							To:          MGMStatusGenerato,
 							Description: "il perfezionamento della pratica {v:numeroPratica1} di apertura del conto {v:servizio}-{v:numero} non e' andato a buon fine",
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           "result",
 									ValidationRule: "required",
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.result}\" == \"KO\"",
 								},
@@ -342,66 +342,66 @@ var campaignTestCase001 = campaignclient.Campaign{
 				},
 				{
 					Code:        MGMStatusPrimoContoAperto,
-					StateType:   tokensclient.StateStd,
+					StateType:   token.StateStd,
 					Description: "Il primo conto e' stato aperto con successo, il codice puo' essere ora utilizzato da un codice fiscale presentato dall'assegnatario del codice",
-					Actions: []tokensclient.ActionDefinition{
+					Actions: []token.ActionDefinition{
 						{
 							ActionId:   "in-action-verifica-15-cf",
-							ActionType: tokensclient.ActionTypeIn,
+							ActionType: token.ActionTypeIn,
 							Properties: map[string]interface{}{
 								ParamNameCf: InputParamCf,
 							},
 						},
 					},
-					OutTransitions: []tokensclient.Transition{
+					OutTransitions: []token.Transition{
 						{
 							To: MGMStatusInAttesaAperturaSecondoConto,
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           ParamNameCf,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamCfHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamCfHelpMessage},
 								},
 								{
 									Name:           ParamNameCanale,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamCanaleHelpMessage},
 								},
 								{
 									Name:           ParamNameProdotto,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamProdottoHelpMessage},
 								},
 								{
 									Name:           ParamNameFase,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamFaseHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamFaseHelpMessage},
 								},
 								{
 									Name:           ParamNameFunnelId,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
+									Help:           token.CodeDescriptionPair{Description: ParamFunnelIdHelpMessage},
 								},
 								{
 									Name:           ParamNameNumeroPratica,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamNumeroPraticaHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 								{
 									Name:           ParamNameServizio,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamServizioHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamServizioHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 								{
 									Name:           ParamNameNumero,
 									ValidationRule: "required",
-									Help:           tokensclient.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
-									Scope:          string(tokensclient.EventTypeNext),
+									Help:           token.CodeDescriptionPair{Description: ParamNumeroHelpMessage},
+									Scope:          string(token.EventTypeNext),
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
@@ -411,7 +411,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Role: "secondary",
 								},
 							},
-							ProcessVarDefinitions: []tokensclient.ProcessVarDefinition{
+							ProcessVarDefinitions: []token.ProcessVarDefinition{
 								{
 									Name:        "cf2",
 									Description: "codice fiscale del presentato",
@@ -453,10 +453,10 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Value:       InputParamProdotto,
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.cf}\" != \"{v:cf1}\"",
-									Help: tokensclient.CodeDescriptionPair{
+									Help: token.CodeDescriptionPair{
 										Description: "il codice fiscale dell'utilizzatore {$.cf} deve essere diverso dal codice fiscale dell'assegnatario del codice {v:cf1}",
 									},
 								},
@@ -466,22 +466,22 @@ var campaignTestCase001 = campaignclient.Campaign{
 				},
 				{
 					Code:        MGMStatusInAttesaAperturaSecondoConto,
-					StateType:   tokensclient.StateStd,
+					StateType:   token.StateStd,
 					Description: "il sistema e' in attesa del perfezionamento della pratica del secondo conto",
-					Help: tokensclient.CodeDescriptionPair{
+					Help: token.CodeDescriptionPair{
 						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito e' stato gia' usato e in attesa di lavorazione",
 					},
-					OutTransitions: []tokensclient.Transition{
+					OutTransitions: []token.Transition{
 						{
 							To: MGMStatusBruciato,
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           "result",
 									ValidationRule: "required",
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
@@ -491,7 +491,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 									Role: "secondary",
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.result}\" == \"OK\"",
 								},
@@ -499,19 +499,19 @@ var campaignTestCase001 = campaignclient.Campaign{
 						},
 						{
 							To: MGMStatusPrimoContoAperto,
-							Properties: []tokensclient.Property{
+							Properties: []token.Property{
 								{
 									Name:           "result",
 									ValidationRule: "required",
 								},
 							},
-							Bearers: []tokensclient.BearerRef{
+							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
 									Role: "primary",
 								},
 							},
-							Rules: []tokensclient.Rule{
+							Rules: []token.Rule{
 								{
 									Expression: "\"{$.result}\" == \"KO\"",
 								},
@@ -521,26 +521,24 @@ var campaignTestCase001 = campaignclient.Campaign{
 				},
 				{
 					Code:        MGMStatusBruciato,
-					StateType:   tokensclient.StateFinal,
+					StateType:   token.StateFinal,
 					Description: "il codice e' stato utilizzato",
-					Help: tokensclient.CodeDescriptionPair{
+					Help: token.CodeDescriptionPair{
 						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito e' gia' stato utilizzato",
 					},
-
-					BusinessView: tokensclient.CodeDescriptionPair{},
 				},
 				{
 					Code:        MGMStatusExpired,
-					StateType:   tokensclient.StateExpired,
+					StateType:   token.StateExpired,
 					Description: "il codice inserito è scaduto e non più utilizzabile",
-					Help: tokensclient.CodeDescriptionPair{
+					Help: token.CodeDescriptionPair{
 						Code:        CodiceNonUtilizzabile,
 						Description: "il codice inserito è scaduto e non più utilizzabile",
 					},
 				},
 			},
 		},
-		TokenIdProviderType: &tokensclient.TokenIdProviderType{ProviderType: tokensclient.TokenIdProviderTypeExternal},
+		TokenIdProviderType: &token.TokenIdProviderType{ProviderType: token.TokenIdProviderTypeExternal},
 	},
 }

@@ -5,6 +5,8 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing/filetracer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"net/http"
 
 	"github.com/opentracing/opentracing-go"
@@ -58,7 +60,7 @@ func TestTokenContextClient(t *testing.T) {
 	executeTestTokenContextClient(t, cli, &tokenContextTestCase001)
 }
 
-func executeTestTokenContextClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.TokenContext) {
+func executeTestTokenContextClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *token.TokenContext) {
 	apiRequestCtx := tokensclient.NewApiRequestContext(tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"))
 
 	tokenContextTestCase.Id = "TESTCTX"
@@ -103,7 +105,7 @@ func TestTokenClient(t *testing.T) {
 	executeTestTokenClient(t, cli, &tokenContextTestCase001)
 }
 
-func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.TokenContext) {
+func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *token.TokenContext) {
 	tokenContextTestCase.Id = "BPMGM1"
 	apiRequestNew := tokensclient.TokenApiRequest{
 		CustomData: map[string]interface{}{
@@ -167,7 +169,7 @@ func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContext
  *
  */
 
-var bearerTestCase001 = tokensclient.Bearer{
+var bearerTestCase001 = bearer.Bearer{
 	Pkey:           "MINNIE",
 	TokenContextId: "BPMGM1",
 	Properties:     nil,
@@ -198,7 +200,7 @@ func TestBearerClient(t *testing.T) {
 	executeTestBearerClient(t, cli, &bearerTestCase001)
 }
 
-func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *tokensclient.Bearer) {
+func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContextTestCase *bearer.Bearer) {
 	apiRequestCtx := tokensclient.NewApiRequestContext(
 		tokensclient.ApiRequestWithApiKey("ApiKeyTpmTokens"),
 		tokensclient.ApiRequestWithHeader("X-Header-Name", "X-Header-Value"))
