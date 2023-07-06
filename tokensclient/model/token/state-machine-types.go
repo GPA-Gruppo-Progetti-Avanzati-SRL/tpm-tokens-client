@@ -3,7 +3,6 @@ package token
 import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util/expression"
-	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 )
 
 type StateType string
@@ -107,7 +106,7 @@ func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error
 		}
 	}
 
-	return StateDefinition{}, tokensclient.NewTokError(tokensclient.TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
+	return StateDefinition{}, NewTokError(TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
 }
 
 func EvaluateActionDefinitions(actions []ActionDefinition, eCtx *expression.Context, actionType ActionType, takeFirstOnly bool) ([]Action, error) {
@@ -147,7 +146,7 @@ func EvalProperties(eCtx *expression.Context, propsDefinition map[string]interfa
 			pv[n], err = eCtx.EvalOne(s)
 
 			if err != nil {
-				return nil, tokensclient.NewTokError(tokensclient.TokenErrorExpressionEvaluation, err.Error())
+				return nil, NewTokError(TokenErrorExpressionEvaluation, err.Error())
 			}
 		}
 
