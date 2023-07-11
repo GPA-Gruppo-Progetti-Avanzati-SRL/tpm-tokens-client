@@ -1,5 +1,7 @@
 package businessview
 
+import "encoding/json"
+
 type BearerRef struct {
 	Id   string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	Role string `yaml:"role,omitempty" mapstructure:"role,omitempty" json:"role,omitempty"`
@@ -49,4 +51,24 @@ type Bearer struct {
 type Actor struct {
 	ActorId string   `yaml:"actor-id,omitempty" mapstructure:"actor-id,omitempty" json:"actor-id,omitempty"`
 	Bearers []Bearer `yaml:"contexts,omitempty" mapstructure:"contexts,omitempty" json:"contexts,omitempty"`
+}
+
+func DeserializeToken(b []byte) (*Token, error) {
+	tok := Token{}
+	err := json.Unmarshal(b, &tok)
+	if err != nil {
+		return nil, err
+	}
+
+	return &tok, nil
+}
+
+func DeserializeActor(b []byte) (*Actor, error) {
+	actor := Actor{}
+	err := json.Unmarshal(b, &actor)
+	if err != nil {
+		return nil, err
+	}
+
+	return &actor, nil
 }

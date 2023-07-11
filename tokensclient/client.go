@@ -5,6 +5,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/businessview"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
@@ -123,7 +124,7 @@ func DeserializeBearerContentResponse(resp *har.Entry) (*bearer.Bearer, error) {
 
 func DeserializeTokenResponseBody(resp *har.Entry) (*token.Token, error) {
 
-	const semLogContext = "tokens-api-client::deserialize-token-context-response"
+	const semLogContext = "tokens-api-client::deserialize-token-response"
 	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
 		err := errors.New("cannot deserialize null response")
 		log.Error().Err(err).Msg(semLogContext)
@@ -135,6 +136,70 @@ func DeserializeTokenResponseBody(resp *har.Entry) (*token.Token, error) {
 	switch resp.Response.Status {
 	case http.StatusOK:
 		resultObj, err = token.DeserializeToken(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
+func DeserializeTokenViewContentResponse(resp *har.Entry) (*businessview.Token, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-token-view-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *businessview.Token
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = businessview.DeserializeToken(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
+func DeserializeActorViewContentResponse(resp *har.Entry) (*businessview.Actor, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-actor-view-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *businessview.Actor
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = businessview.DeserializeActor(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}

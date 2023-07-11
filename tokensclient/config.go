@@ -30,6 +30,10 @@ const (
 	BearerContextDelete                  = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
 	AddToken2BearerInContextPost         = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
 	RemoveTokenFromBearerInContextDelete = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder + "/" + TokenIdPathPlaceHolder
+
+	ApiViewBasePath = "/api/v1/views"
+	GetTokenView    = ApiViewBasePath + "/tokens/" + TokenIdPathPlaceHolder
+	GetActorView    = ApiViewBasePath + "/actors/" + ActorIdPathPlaceHolder
 )
 
 type HostInfo struct {
