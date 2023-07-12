@@ -35,10 +35,14 @@ func (c *Client) GetTokenView(reqCtx ApiRequestContext, tokId string) (*business
 	return resp, err
 }
 
-func (c *Client) GetActorView(reqCtx ApiRequestContext, actorId string) (*businessview.Actor, error) {
+func (c *Client) GetActorView(reqCtx ApiRequestContext, actorId string, fullView bool) (*businessview.Actor, error) {
 	const semLogContext = "tpm-tokens-client::get-actor-view"
 
-	ep := c.tokenViewApiUrl(GetActorView, actorId, nil)
+	var qp []har.NameValuePair
+	if fullView {
+		qp = append(qp, har.NameValuePair{Name: "fullview", Value: "Y"})
+	}
+	ep := c.actorViewApiUrl(GetActorView, actorId, qp)
 
 	req, err := c.client.NewRequest(http.MethodGet, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
