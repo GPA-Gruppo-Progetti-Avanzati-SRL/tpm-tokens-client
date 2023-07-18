@@ -107,13 +107,12 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 			for n, v := range m {
 				actionBody[n] = v
 			}
-			return actionBody, nil
 		}
 	} else {
 		err = handleBooleanResponse(harEntry)
 	}
 
-	return nil, err
+	return actionBody, err
 }
 
 func handleEnrichingResponse(harEntry *har.Entry) (map[string]interface{}, error) {
