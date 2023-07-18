@@ -196,6 +196,9 @@ func (tok *Token) IsExpired(timelineMode string) bool {
 }
 
 func (tok *Token) Vars() ProcessVars {
+	if len(tok.Events) == 0 {
+		return nil
+	}
 	lastEvt := tok.Events[len(tok.Events)-1]
 	return lastEvt.Vars
 }
