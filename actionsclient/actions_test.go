@@ -21,11 +21,19 @@ func TestActions(t *testing.T) {
 
 	closer, err := InitTracing(t)
 	require.NoError(t, err)
-	defer closer.Close()
+	defer func() {
+		if closer != nil {
+			_ = closer.Close()
+		}
+	}()
 
 	hc, err := InitHarTracing()
 	require.NoError(t, err)
-	defer hc.Close()
+	defer func() {
+		if hc != nil {
+			_ = hc.Close()
+		}
+	}()
 
 	cfg := []actions.Config{
 		{
@@ -54,7 +62,7 @@ func TestActions(t *testing.T) {
 				Port:     3001,
 			},
 			Method: http.MethodPost,
-			Path:   "/api/v1/actions/id-of-action2",
+			Path:   "/api/v1/actions/test-action",
 		},
 	}
 
@@ -73,7 +81,7 @@ func TestActions(t *testing.T) {
 		}))
 	require.NoError(t, err)
 
-	resp, err := lks.CallActions([]string{"id-of-action"}, exprCtx, input)
+	resp, err := lks.CallAction("id-of-action", exprCtx, input)
 	require.NoError(t, err)
 
 	t.Log(resp)

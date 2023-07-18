@@ -8,6 +8,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/rs/zerolog/log"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -79,6 +80,22 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 			Message:    err.Error(),
 			Ts:         time.Now().Format(time.RFC3339Nano),
 		}
+	}
+
+	if harEntry.Response.Status != http.StatusOK {
+		var ar *ActionResponse
+		if harEntry.Response.Content != nil && harEntry.Response.Content.Data != nil && strings.HasPrefix(harEntry.Response.Content.MimeType, "application/json") {
+			ar, err = DeserializeActionResponse(harEntry)
+		} else {
+			ar = &ActionResponse{
+				StatusCode: harEntry.Response.Status,
+				Text:       http.StatusText(harEntry.Response.Status),
+				Message:    "unspecified error",
+				Ts:         time.Now().Format(time.RFC3339Nano),
+			}
+		}
+
+		return nil, ar
 	}
 
 	log.Info().Str("action-id", actionId).Int("status-code", harEntry.Response.Status).Msg(semLogContext)
@@ -177,7 +194,90 @@ func handleBooleanResponse(harEntry *har.Entry) error {
 	return &ar
 }
 
-func (lks *LinkedService) CallActions(acts []string, expressionCtx *expression.Context, body map[string]interface{}, opts ...restclient.Option) (map[string]interface{}, error) {
+func (lks *LinkedService) CallAction(actionId string, expressionCtx *expression.Context, body map[string]interface{}, opts ...restclient.Option) (map[string]interface{}, error) {
+
+	const semLogContext = semLogContextBase + "::call-action"
+
+	c, ok := lks.FindConfigByActionId(actionId)
+	if !ok {
+		log.Error().Str("action-id", actionId).Msg(semLogContext + " action not found")
+		return nil, &ActionResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("action %s not found", actionId),
+			Ts:         time.Now().Format(time.RFC3339Nano),
+		}
+	} else {
+		log.Trace().Str("action-id", actionId).Msg(semLogContext)
+	}
+
+	cli, err := lks.NewClient(c, expressionCtx, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	//// add or override actionBody with action.properties
+	//for n, v := range actId.Properties {
+	//	actionBody[n] = v
+	//}
+
+	m, err := cli.ExecuteAction(actionId, body)
+	cli.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	return m, nil
+}
+
+/*
+func (lks *LinkedService) CallActions(acts []token.Action, expressionCtx *expression.Context, body map[string]interface{}, opts ...restclient.Option) (map[string]interface{}, error) {
+
+		const semLogContext = semLogContextBase + "::call-actions"
+
+		// Initialize action-body
+		actionBody := make(map[string]interface{})
+		for n, v := range body {
+			actionBody[n] = v
+		}
+
+		for _, actId := range acts {
+
+			c, ok := lks.FindConfigByActionId(actId.ActionId)
+			if !ok {
+				log.Error().Str("action-id", actId.ActionId).Msg(semLogContext + " action not found")
+				return nil, &ActionResponse{
+					StatusCode: http.StatusInternalServerError,
+					Message:    fmt.Sprintf("action %s not found", actId),
+					Ts:         time.Now().Format(time.RFC3339Nano),
+				}
+			} else {
+				log.Trace().Str("action-id", actId.ActionId).Msg(semLogContext)
+			}
+
+			cli, err := lks.NewClient(c, expressionCtx, opts...)
+			if err != nil {
+				return nil, err
+			}
+
+			// add or override actionBody with action.properties
+			for n, v := range actId.Properties {
+				actionBody[n] = v
+			}
+
+			m, err := cli.ExecuteAction(actId.ActionId, actionBody)
+			cli.Close()
+			if err != nil {
+				return nil, err
+			}
+
+			actionBody = m
+		}
+
+		return actionBody, nil
+	}
+*/
+
+func (lks *LinkedService) CallActionsDeprecated(acts []string, expressionCtx *expression.Context, body map[string]interface{}, opts ...restclient.Option) (map[string]interface{}, error) {
 
 	const semLogContext = semLogContextBase + "::call-actions"
 
