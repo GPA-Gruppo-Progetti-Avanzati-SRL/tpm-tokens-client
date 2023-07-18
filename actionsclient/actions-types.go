@@ -165,5 +165,6 @@ func DeserializeActionResponse(resp *har.Entry) (*ActionResponse, error) {
 	a := ActionResponse{}
 	err := json.Unmarshal(resp.Response.Content.Data, &a)
 
+	a.StatusCode = resp.Response.Status
 	return &a, err
 }
