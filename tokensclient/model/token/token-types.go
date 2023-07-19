@@ -9,12 +9,34 @@ import (
 type EventType string
 type TokenType string
 
+func (evtyp EventType) Scope() string {
+
+	s := "undef"
+	switch evtyp {
+	case EventTypeCheck:
+		s = string(EventTypeCheck)
+	case EventTypeNext:
+		s = string(EventTypeNext)
+	case EventTypeCheckCreate:
+		s = string(EventTypeCheck)
+	case EventTypeCreate:
+		s = string(EventTypeNext)
+	default:
+		log.Error().Interface("evt-type", evtyp).Msg("cannot determine operation scope from event type... reverting to next")
+		s = string(EventTypeNext)
+	}
+
+	return s
+}
+
 const (
-	EventTypeCreate     EventType = "create"
-	EventTypeNext       EventType = "next"
-	EventTypeCommit     EventType = "commit"
-	EventTypeRollback   EventType = "rollback"
-	EventTypeExpiration EventType = "expired"
+	EventTypeCheckCreate EventType = "check-create"
+	EventTypeCreate      EventType = "create"
+	EventTypeCheck       EventType = "check"
+	EventTypeNext        EventType = "next"
+	EventTypeCommit      EventType = "commit"
+	EventTypeRollback    EventType = "rollback"
+	EventTypeExpiration  EventType = "expired"
 
 	TokenTypeStd    TokenType = "std"
 	TokenTypeBanner TokenType = "banner"
