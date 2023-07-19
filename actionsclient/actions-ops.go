@@ -103,16 +103,19 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 	if c.useResponse {
 		var m map[string]interface{}
 		m, err = handleEnrichingResponse(harEntry)
-		if err == nil {
-			for n, v := range m {
-				actionBody[n] = v
+		return m, err
+		/*
+			if err == nil {
+				for n, v := range m {
+					actionBody[n] = v
+				}
 			}
-		}
+		*/
 	} else {
 		err = handleBooleanResponse(harEntry)
 	}
 
-	return actionBody, err
+	return nil, err
 }
 
 func handleEnrichingResponse(harEntry *har.Entry) (map[string]interface{}, error) {

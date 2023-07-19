@@ -45,6 +45,14 @@ func TestActions(t *testing.T) {
 						Name:  "request-id",
 						Value: "{h:request-Id}",
 					},
+					{
+						Name:  "x-api-key",
+						Value: "ApiKeyTpmTokens",
+					},
+					{
+						Name:  "Content-Type",
+						Value: "application/json",
+					},
 				},
 				TraceGroupName:   "leas-cab-wfm-in-actions",
 				TraceRequestName: "",
@@ -59,10 +67,10 @@ func TestActions(t *testing.T) {
 			Host: actions.HostInfo{
 				Scheme:   "http",
 				HostName: "localhost",
-				Port:     3001,
+				Port:     8081,
 			},
 			Method: http.MethodPost,
-			Path:   "/api/v1/actions/test-action",
+			Path:   "/api/v1/actions/guards/bearer-doesnt-exist",
 		},
 	}
 
@@ -70,7 +78,8 @@ func TestActions(t *testing.T) {
 	require.NoError(t, err)
 
 	input := map[string]interface{}{
-		"ssn": "MPRMLS62S21G337J",
+		"actor-id":   "MPRMLS62S21G337J",
+		"context-id": "BPACC3",
 	}
 	exprCtx, err := expression.NewContext(
 		expression.WithMapInput(input),
