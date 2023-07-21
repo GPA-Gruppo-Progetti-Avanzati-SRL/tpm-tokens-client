@@ -56,10 +56,10 @@ var campaignTestCase001 = campaignclient.Campaign{
 		Fase:     "Apertura",
 	},
 	CampaignType: campaignclient.Type{
-		Code:        "MGM",
-		Description: "member get member",
-		Unique:      true,
-		PromoCode:   "CPQ promo code",
+		Code:           "MGM",
+		Description:    "member get member",
+		Unique:         true,
+		CpqServiceCode: "CCRT",
 		//TargetProducts: []campaignclient.ProductInfo{
 		//	{
 		//		Code:  "Codice prodotto interessato alla campagna (es. Start)",

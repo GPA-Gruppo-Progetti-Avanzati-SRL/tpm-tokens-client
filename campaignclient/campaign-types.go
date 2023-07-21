@@ -37,7 +37,7 @@ type Type struct {
 	Code           string        `yaml:"code,omitempty" mapstructure:"code,omitempty" json:"code,omitempty"`
 	Description    string        `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
 	Unique         bool          `yaml:"unique,omitempty" mapstructure:"unique,omitempty" json:"unique,omitempty"`
-	PromoCode      string        `yaml:"promo,omitempty" mapstructure:"promo,omitempty" json:"promo,omitempty"`
+	CpqServiceCode string        `yaml:"cpq-service-code,omitempty" mapstructure:"cpq-service-code,omitempty" json:"cpq-service-code,omitempty"`
 	TokenMode      TokenMode     `yaml:"token-mode,omitempty" mapstructure:"token-mode,omitempty" json:"token-mode,omitempty"`
 	TargetProducts []ProductInfo `yaml:"target-products,omitempty" mapstructure:"target-products,omitempty" json:"target-products,omitempty"`
 }
