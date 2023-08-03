@@ -47,8 +47,8 @@ var TokErrorTextMapping = map[string]TokErrorInfo{
 	TokenContextNotFoundError:                {StatusCode: http.StatusBadRequest, Code: TokenContextNotFoundError, Text: "token context not found"},
 	TokenContextAlreadyExists:                {StatusCode: http.StatusBadRequest, Code: TokenContextAlreadyExists, Text: "token context already exists"},
 	TokenContextNotActiveError:               {StatusCode: http.StatusBadRequest, Code: TokenContextNotActiveError, Text: "token context not active"},
-	TokenExpiredError:                        {StatusCode: http.StatusConflict, Code: TokenExpiredError, Text: "token expired"},
-	TokenNotFoundError:                       {StatusCode: http.StatusNotFound, Code: TokenNotFoundError, Text: "token not found"},
+	TokenExpiredError:                        {StatusCode: http.StatusConflict, Code: TokenExpiredError, Text: "il codice indicato risulta scaduto"},
+	TokenNotFoundError:                       {StatusCode: http.StatusNotFound, Code: TokenNotFoundError, Text: "codice a bruciatura non presente a sistema"}, // "token not found"
 }
 
 type TokError struct {
