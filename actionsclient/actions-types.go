@@ -121,11 +121,12 @@ func (c *Client) Url(qParams []har.NameValuePair) string {
 }
 
 type ActionResponse struct {
-	StatusCode int    `yaml:"-" mapstructure:"-" json:"-"`
-	ErrCode    string `json:"error-code,omitempty" yaml:"error-code,omitempty" mapstructure:"error-code,omitempty"`
-	Text       string `json:"text,omitempty" yaml:"text,omitempty" mapstructure:"text,omitempty"`
-	Message    string `yaml:"message,omitempty" mapstructure:"message,omitempty" json:"message,omitempty"`
-	Ts         string `yaml:"timestamp,omitempty" mapstructure:"timestamp,omitempty" json:"timestamp,omitempty"`
+	StatusCode  int    `yaml:"-" mapstructure:"-" json:"-"`
+	ErrCode     string `json:"error-code,omitempty" yaml:"error-code,omitempty" mapstructure:"error-code,omitempty"`
+	Text        string `json:"text,omitempty" yaml:"text,omitempty" mapstructure:"text,omitempty"`
+	Message     string `yaml:"message,omitempty" mapstructure:"message,omitempty" json:"message,omitempty"`
+	Description string `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Ts          string `yaml:"timestamp,omitempty" mapstructure:"timestamp,omitempty" json:"timestamp,omitempty"`
 }
 
 func (ae *ActionResponse) Error() string {
@@ -145,6 +146,10 @@ func (ae *ActionResponse) Error() string {
 
 	if ae.Message != "" {
 		sv.WriteString(fmt.Sprintf("message: %s"+sep, ae.Message))
+	}
+
+	if ae.Description != "" {
+		sv.WriteString(fmt.Sprintf("description: %s"+sep, ae.Description))
 	}
 
 	if ae.Ts != "" {

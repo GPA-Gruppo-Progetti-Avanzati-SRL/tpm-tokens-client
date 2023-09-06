@@ -76,9 +76,9 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 	c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return nil, &ActionResponse{
-			StatusCode: harEntry.Response.Status,
-			Message:    err.Error(),
-			Ts:         time.Now().Format(time.RFC3339Nano),
+			StatusCode:  harEntry.Response.Status,
+			Description: err.Error(),
+			Ts:          time.Now().Format(time.RFC3339Nano),
 		}
 	}
 
@@ -88,10 +88,10 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 			ar, err = DeserializeActionResponse(harEntry)
 		} else {
 			ar = &ActionResponse{
-				StatusCode: harEntry.Response.Status,
-				Text:       http.StatusText(harEntry.Response.Status),
-				Message:    "unspecified error",
-				Ts:         time.Now().Format(time.RFC3339Nano),
+				StatusCode:  harEntry.Response.Status,
+				Text:        http.StatusText(harEntry.Response.Status),
+				Description: "unspecified error",
+				Ts:          time.Now().Format(time.RFC3339Nano),
 			}
 		}
 
@@ -153,9 +153,9 @@ func handleEnrichingResponse(harEntry *har.Entry) (map[string]interface{}, error
 	}
 
 	ar = ActionResponse{
-		StatusCode: http.StatusInternalServerError,
-		Message:    err.Error(),
-		Ts:         time.Now().Format(time.RFC3339Nano),
+		StatusCode:  http.StatusInternalServerError,
+		Description: err.Error(),
+		Ts:          time.Now().Format(time.RFC3339Nano),
 	}
 
 	return nil, &ar
@@ -188,9 +188,9 @@ func handleBooleanResponse(harEntry *har.Entry) error {
 	}
 
 	ar = ActionResponse{
-		StatusCode: http.StatusInternalServerError,
-		Message:    err.Error(),
-		Ts:         time.Now().Format(time.RFC3339Nano),
+		StatusCode:  http.StatusInternalServerError,
+		Description: err.Error(),
+		Ts:          time.Now().Format(time.RFC3339Nano),
 	}
 
 	return &ar
@@ -204,9 +204,9 @@ func (lks *LinkedService) CallAction(actionId string, expressionCtx *expression.
 	if !ok {
 		log.Error().Str("action-id", actionId).Msg(semLogContext + " action not found")
 		return nil, &ActionResponse{
-			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("action %s not found", actionId),
-			Ts:         time.Now().Format(time.RFC3339Nano),
+			StatusCode:  http.StatusInternalServerError,
+			Description: fmt.Sprintf("action %s not found", actionId),
+			Ts:          time.Now().Format(time.RFC3339Nano),
 		}
 	} else {
 		log.Trace().Str("action-id", actionId).Msg(semLogContext)
@@ -294,9 +294,9 @@ func (lks *LinkedService) CallActionsDeprecated(acts []string, expressionCtx *ex
 		if !ok {
 			log.Error().Str("action-id", actId).Msg(semLogContext + " action not found")
 			return nil, &ActionResponse{
-				StatusCode: http.StatusInternalServerError,
-				Message:    fmt.Sprintf("action %s not found", actId),
-				Ts:         time.Now().Format(time.RFC3339Nano),
+				StatusCode:  http.StatusInternalServerError,
+				Description: fmt.Sprintf("action %s not found", actId),
+				Ts:          time.Now().Format(time.RFC3339Nano),
 			}
 		} else {
 			log.Trace().Str("action-id", actId).Msg(semLogContext)

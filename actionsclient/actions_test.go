@@ -78,7 +78,7 @@ func TestActions(t *testing.T) {
 	require.NoError(t, err)
 
 	input := map[string]interface{}{
-		"actor-id":   "MPRMLS62S21G337J",
+		"actor-id":   "HQWLMN80A01F839J",
 		"context-id": "BPACC3",
 	}
 	exprCtx, err := expression.NewContext(
