@@ -76,9 +76,9 @@ func (c *Client) ExecuteAction(actionId string, actionBody map[string]interface{
 	c.harEntries = append(c.harEntries, harEntry)
 	if err != nil {
 		return nil, &ActionResponse{
-			StatusCode:  harEntry.Response.Status,
-			Description: err.Error(),
-			Ts:          time.Now().Format(time.RFC3339Nano),
+			StatusCode: harEntry.Response.Status,
+			Message:    err.Error(),
+			Ts:         time.Now().Format(time.RFC3339Nano),
 		}
 	}
 
