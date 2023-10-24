@@ -232,7 +232,7 @@ func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContex
 	require.NoError(t, err)
 	t.Log(resp)
 
-	resp, err = cli.RemoveTokenFromBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID")
+	resp, err = cli.RemoveTokenFromBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID", "")
 	require.NoError(t, err)
 	t.Log(resp)
 
