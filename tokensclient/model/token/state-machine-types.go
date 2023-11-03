@@ -76,6 +76,12 @@ type BearerRef struct {
 	Role string `yaml:"role,omitempty" mapstructure:"role,omitempty" json:"role,omitempty"`
 }
 
+type TimerDefinition struct {
+	Duration    int                `yaml:"duration,omitempty" mapstructure:"duration,omitempty" json:"duration,omitempty"`
+	Description string             `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Actions     []ActionDefinition `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+}
+
 type Transition struct {
 	Name                  string                 `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
 	To                    string                 `yaml:"to,omitempty" mapstructure:"to,omitempty" json:"to,omitempty"`
@@ -87,6 +93,7 @@ type Transition struct {
 	Actions               []ActionDefinition     `yaml:"out-actions,omitempty" mapstructure:"out-actions,omitempty" json:"out-actions,omitempty"`
 	Bearers               []BearerRef            `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 	Description           string                 `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	TimerDefinition       *TimerDefinition       `yaml:"timer-def,omitempty" mapstructure:"timer-def,omitempty" json:"timer-def,omitempty"`
 }
 
 type Diagram struct {

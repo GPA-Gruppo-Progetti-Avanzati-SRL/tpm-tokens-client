@@ -86,19 +86,28 @@ type State struct {
 	LRAId       string `yaml:"lra-id,omitempty" mapstructure:"lra-id,omitempty" json:"lra-id,omitempty"`
 }
 
+type Timer struct {
+	PKey            string           `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
+	Id              string           `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Expires         string           `yaml:"expires,omitempty" mapstructure:"expires,omitempty" json:"expires,omitempty"`
+	Outdated        bool             `yaml:"outdated,omitempty" mapstructure:"outdated,omitempty" json:"outdated,omitempty"`
+	TimerDefinition *TimerDefinition `yaml:"definition,omitempty" mapstructure:"definition,omitempty" json:"definition,omitempty"`
+}
+
 type ProcessVars map[string]interface{}
 
 type Event struct {
-	RequestId   string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
-	Name        string      `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
-	Description string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	Typ         EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	State       State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
-	Ts          string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
-	ExpiryTs    string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
-	Vars        ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
-	Actions     []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
-	Bearers     []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
+	RequestId      string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
+	Name           string      `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	Description    string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Typ            EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	State          State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
+	Ts             string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
+	ExpiryTs       string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
+	Vars           ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
+	Actions        []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+	Bearers        []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
+	TimerReference *Timer      `yaml:"timer-ref,omitempty" mapstructure:"timer-ref,omitempty" json:"timer-ref,omitempty"`
 }
 
 func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bool) {
@@ -108,6 +117,10 @@ func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bo
 		}
 	}
 	return Action{}, false
+}
+
+func (evt *Event) IsPending() bool {
+	return evt.State.Pending
 }
 
 type Token struct {
@@ -154,6 +167,35 @@ func (tok *Token) MustToJSON() []byte {
 	}
 
 	return b
+}
+
+func (tok *Token) FindOutdatedTimers() []*Timer {
+	var tms []*Timer
+	for i := 0; i < len(tok.Events)-1; i++ {
+		if tok.Events[i].TimerReference != nil {
+			tms = append(tms, tok.Events[i].TimerReference)
+		}
+	}
+
+	return tms
+}
+
+func (tok *Token) MarkTimersAsOutdated() {
+	for i := 0; i < len(tok.Events); i++ {
+		if tok.Events[i].TimerReference != nil {
+			tok.Events[i].TimerReference.Outdated = true
+			tok.Events[i].TimerReference.TimerDefinition = nil
+		}
+	}
+}
+
+func (tok *Token) IsPending() bool {
+	ndx := tok.FindLastEventIndex()
+	if ndx >= 0 {
+		return tok.Events[ndx].IsPending()
+	}
+
+	return false
 }
 
 func (tok *Token) FindEventIndexByState(st string) int {
