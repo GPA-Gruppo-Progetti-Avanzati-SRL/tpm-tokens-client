@@ -42,6 +42,8 @@ const (
 	TokenTypeBanner TokenType = "banner"
 
 	SysParamNameTokenId = "_tokId"
+
+	semLogLabelTokenId = "token-id"
 )
 
 var NilTokenId = ""
@@ -219,7 +221,7 @@ func (tok *Token) FindCurrentState() string {
 		return tok.Events[len(tok.Events)-1].State.Code
 	}
 
-	log.Warn().Str("token-id", tok.Id).Msg("token unknown state")
+	log.Warn().Str(semLogLabelTokenId, tok.Id).Msg("token unknown state")
 	return ""
 }
 
@@ -237,7 +239,7 @@ func (tok *Token) FindEventIndexByRequestId(reqId string) int {
 func (tok *Token) IsExpired(timelineMode string) bool {
 	lastEvt := tok.FindLastEventIndex()
 	if lastEvt < 0 {
-		log.Warn().Str("token-id", tok.Id).Msg("token is empty")
+		log.Warn().Str(semLogLabelTokenId, tok.Id).Msg("token is empty")
 		return true
 	}
 
@@ -249,7 +251,7 @@ func (tok *Token) IsExpired(timelineMode string) bool {
 	if timelineMode == ExpirationModeTimestamp {
 		expTm, err := time.Parse(time.RFC3339, expTs)
 		if err != nil {
-			log.Error().Err(err).Str("token-id", tok.Id).Str("expiry-ts", expTs).Msg("invalid token expiry ts")
+			log.Error().Err(err).Str(semLogLabelTokenId, tok.Id).Str("expiry-ts", expTs).Msg("invalid token expiry ts")
 			return true
 		}
 
