@@ -88,14 +88,6 @@ type State struct {
 	LRAId       string `yaml:"lra-id,omitempty" mapstructure:"lra-id,omitempty" json:"lra-id,omitempty"`
 }
 
-type Timer struct {
-	PKey            string           `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
-	Id              string           `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
-	Expires         string           `yaml:"expires,omitempty" mapstructure:"expires,omitempty" json:"expires,omitempty"`
-	Outdated        bool             `yaml:"outdated,omitempty" mapstructure:"outdated,omitempty" json:"outdated,omitempty"`
-	TimerDefinition *TimerDefinition `yaml:"definition,omitempty" mapstructure:"definition,omitempty" json:"definition,omitempty"`
-}
-
 type ProcessVars map[string]interface{}
 
 type Event struct {
@@ -182,11 +174,27 @@ func (tok *Token) FindOutdatedTimers() []*Timer {
 	return tms
 }
 
+func (tok *Token) FindActiveTimer() *Timer {
+
+	var tm *Timer
+	ndx := tok.FindLastEventIndex()
+	if ndx >= 0 {
+		tm = tok.Events[ndx].TimerReference
+	}
+
+	if tm != nil && !tm.Outdated && tm.TimerDefinition != nil {
+		return tm
+	}
+
+	return nil
+}
+
 func (tok *Token) MarkTimersAsOutdated() {
 	for i := 0; i < len(tok.Events); i++ {
 		if tok.Events[i].TimerReference != nil {
-			tok.Events[i].TimerReference.Outdated = true
-			tok.Events[i].TimerReference.TimerDefinition = nil
+			tok.Events[i].TimerReference.MarkAsOutdated()
+			// tok.Events[i].TimerReference.Outdated = true
+			// tok.Events[i].TimerReference.TimerDefinition = nil
 		}
 	}
 }

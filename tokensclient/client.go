@@ -154,6 +154,38 @@ func DeserializeTokenResponseBody(resp *har.Entry) (*token.Token, error) {
 	return resultObj, nil
 }
 
+func DeserializeTokenTimerResponseBody(resp *har.Entry) (*token.Timer, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-token-timer-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *token.Timer
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = token.DeserializeTimer(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
 func DeserializeTokenViewContentResponse(resp *har.Entry) (*businessview.Token, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-token-view-response"

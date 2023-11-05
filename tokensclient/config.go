@@ -14,14 +14,16 @@ const (
 	TokenContextPut      = TokenContextBasePath + "/" + TokenContextIdPathPlaceHolder
 	TokenContextDelete   = TokenContextBasePath + "/" + TokenContextIdPathPlaceHolder
 
-	TokenBasePath = TokenContextBasePath + "/" + TokenContextIdPathPlaceHolder + "/tokens"
-	NewToken      = TokenBasePath
-	GetToken      = TokenBasePath + "/" + TokenIdPathPlaceHolder
-	DeleteToken   = TokenBasePath + "/" + TokenIdPathPlaceHolder
-	TokenNext     = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/next"
-	TokenCheck    = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/check"
-	TokenCommit   = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/commit"
-	TokenRollback = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/rollback"
+	TokenBasePath     = TokenContextBasePath + "/" + TokenContextIdPathPlaceHolder + "/tokens"
+	NewToken          = TokenBasePath
+	GetToken          = TokenBasePath + "/" + TokenIdPathPlaceHolder
+	DeleteToken       = TokenBasePath + "/" + TokenIdPathPlaceHolder
+	TokenNext         = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/next"
+	TokenCheck        = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/check"
+	TokenCommit       = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/commit"
+	TokenRollback     = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/rollback"
+	TokenTimerCreate  = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/timers"
+	TokenTimersDelete = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/timers"
 
 	BearerBasePath                       = "/api/v1/bearers"
 	BearerContextGet                     = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
