@@ -1,15 +1,19 @@
 package tokensclient
 
 import (
+	"fmt"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"net/http"
+	"net/url"
+	"strings"
 )
 
 func (c *Client) CreateTimer(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Timer, error) {
 	const semLogContext = "tpm-tokens-client::post-create-timer"
 
-	ep := c.tokenApiUrl(TokenTimerCreate, ctxId, tokId, nil)
+	ep := c.timerApiUrl(TokenTimerCreate, ctxId, tokId, nil)
 
 	req, err := c.client.NewRequest(http.MethodPost, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -34,7 +38,7 @@ func (c *Client) CreateTimer(reqCtx ApiRequestContext, ctxId string, tokId strin
 func (c *Client) DeleteTimers(reqCtx ApiRequestContext, ctxId string, tokId string) (*ApiResponse, error) {
 	const semLogContext = "tpm-tokens-client::post-delete-timers"
 
-	ep := c.tokenApiUrl(TokenTimersDelete, ctxId, tokId, nil)
+	ep := c.timerApiUrl(TokenTimersDelete, ctxId, tokId, nil)
 
 	req, err := c.client.NewRequest(http.MethodDelete, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -54,4 +58,30 @@ func (c *Client) DeleteTimers(reqCtx ApiRequestContext, ctxId string, tokId stri
 
 	resp, err := DeserializeApiResponse(harEntry)
 	return resp, err
+}
+
+func (c *Client) timerApiUrl(apiPath string, ctxId string, tokenId string, qParams []har.NameValuePair) string {
+	var sb = strings.Builder{}
+	sb.WriteString(c.host.Scheme)
+	sb.WriteString("://")
+	sb.WriteString(c.host.HostName)
+	sb.WriteString(":")
+	sb.WriteString(fmt.Sprint(c.host.Port))
+
+	apiPath = strings.Replace(apiPath, TokenContextIdPathPlaceHolder, token.WellFormTokenContextId(ctxId), 1)
+	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, token.WellFormTokenId(tokenId), 1)
+	sb.WriteString(apiPath)
+
+	if len(qParams) > 0 {
+		sb.WriteString("?")
+		for i, qp := range qParams {
+			if i > 0 {
+				sb.WriteString("&")
+			}
+			sb.WriteString(qp.Name)
+			sb.WriteString("=")
+			sb.WriteString(url.QueryEscape(qp.Value))
+		}
+	}
+	return sb.String()
 }

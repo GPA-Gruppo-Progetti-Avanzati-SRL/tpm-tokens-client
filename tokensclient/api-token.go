@@ -48,13 +48,14 @@ func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) 
 	return resp, err
 }
 
-func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenApiRequest, ct string) (*token.Token, error) {
+func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::new-token"
 
 	op := "use"
-	if token.CheckOnlyFLag {
+	if tokenRequest.CheckOnlyFLag {
 		op = "check"
 	}
+
 	ep := c.tokenApiUrl(NewToken, ctxId, "", []har.NameValuePair{{Name: "op", Value: op}})
 
 	if ct == "" {
@@ -68,7 +69,8 @@ func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, token *TokenAp
 		ct = ContentTypeApplicationJson
 	}
 
-	b, err := token.ToJSON()
+	tokenRequest.TokenId = token.WellFormTokenId(tokenRequest.TokenId)
+	b, err := tokenRequest.ToJSON()
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}
@@ -168,7 +170,7 @@ func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId str
 	return resp, err
 }
 
-func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*token.Token, error) {
+func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-next"
 
 	ep := c.tokenApiUrl(TokenNext, ctxId, tokId, nil)
@@ -184,7 +186,8 @@ func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string,
 		ct = ContentTypeApplicationJson
 	}
 
-	b, err := token.ToJSON()
+	tokenRequest.TokenId = token.WellFormTokenId(tokenRequest.TokenId)
+	b, err := tokenRequest.ToJSON()
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}
@@ -209,7 +212,7 @@ func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string,
 	return resp, err
 }
 
-func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, token *TokenApiRequest, ct string) (*token.Token, error) {
+func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-check"
 
 	ep := c.tokenApiUrl(TokenCheck, ctxId, tokId, nil)
@@ -225,7 +228,8 @@ func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string
 		ct = ContentTypeApplicationJson
 	}
 
-	b, err := token.ToJSON()
+	tokenRequest.TokenId = token.WellFormTokenId(tokenRequest.TokenId)
+	b, err := tokenRequest.ToJSON()
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
 	}
@@ -258,8 +262,8 @@ func (c *Client) tokenApiUrl(apiPath string, ctxId string, tokenId string, qPara
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
 
-	apiPath = strings.Replace(apiPath, TokenContextIdPathPlaceHolder, ctxId, 1)
-	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, tokenId, 1)
+	apiPath = strings.Replace(apiPath, TokenContextIdPathPlaceHolder, token.WellFormTokenContextId(ctxId), 1)
+	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, token.WellFormTokenId(tokenId), 1)
 	sb.WriteString(apiPath)
 
 	if len(qParams) > 0 {

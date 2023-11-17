@@ -1,6 +1,9 @@
 package token
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"strings"
+)
 
 type TimerDefinition struct {
 	Duration    int                `yaml:"duration,omitempty" mapstructure:"duration,omitempty" json:"duration,omitempty"`
@@ -34,6 +37,10 @@ func (timer *Timer) MustToJSON() []byte {
 	}
 
 	return b
+}
+
+func WellFormTimerId(id string) string {
+	return strings.ToUpper(id)
 }
 
 func DeserializeTimer(b []byte) (*Timer, error) {

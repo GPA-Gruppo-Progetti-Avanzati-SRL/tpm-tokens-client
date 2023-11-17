@@ -60,6 +60,10 @@ func Id(bearerId, contextId string) string {
 	return strings.Join([]string{bearerId, contextId}, "-")
 }
 
+func WellFormBearerId(id string) string {
+	return strings.ToUpper(id)
+}
+
 func (ber *Bearer) HasToken(tokId string) bool {
 	for _, t := range ber.TokenRefs {
 		if t.Id == tokId {

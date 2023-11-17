@@ -3,6 +3,7 @@ package token
 import (
 	"encoding/json"
 	"github.com/rs/zerolog/log"
+	"strings"
 	"time"
 )
 
@@ -161,6 +162,10 @@ func (tok *Token) MustToJSON() []byte {
 	}
 
 	return b
+}
+
+func WellFormTokenId(id string) string {
+	return strings.ToUpper(id)
 }
 
 func (tok *Token) FindOutdatedTimers() []*Timer {

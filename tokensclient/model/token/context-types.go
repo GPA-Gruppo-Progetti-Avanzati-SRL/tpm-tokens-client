@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util/expression"
 	"github.com/rs/zerolog/log"
+	"strings"
 	"time"
 )
 
@@ -133,6 +134,10 @@ func (ctx *TokenContext) MustToJSON() []byte {
 	}
 
 	return b
+}
+
+func WellFormTokenContextId(id string) string {
+	return strings.ToUpper(id)
 }
 
 func DeserializeContext(b []byte) (*TokenContext, error) {

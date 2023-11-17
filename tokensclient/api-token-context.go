@@ -52,6 +52,7 @@ func (c *Client) NewTokenContext(reqCtx ApiRequestContext, tokenCtx *token.Token
 		ct = ContentTypeApplicationJson
 	}
 
+	tokenCtx.Id = token.WellFormTokenContextId(tokenCtx.Id)
 	b, err := tokenCtx.ToJSON()
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
@@ -93,6 +94,7 @@ func (c *Client) ReplaceTokenContext(reqCtx ApiRequestContext, tokenCtx *token.T
 		ct = ContentTypeApplicationJson
 	}
 
+	tokenCtx.Id = token.WellFormTokenContextId(tokenCtx.Id)
 	b, err := tokenCtx.ToJSON()
 	if err != nil {
 		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
@@ -164,7 +166,7 @@ func (c *Client) tokenContextApiUrl(apiPath string, ctxId string, qParams []har.
 	sb.WriteString(c.host.HostName)
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
-	sb.WriteString(strings.Replace(apiPath, TokenContextIdPathPlaceHolder, ctxId, 1))
+	sb.WriteString(strings.Replace(apiPath, TokenContextIdPathPlaceHolder, token.WellFormTokenContextId(ctxId), 1))
 
 	if len(qParams) > 0 {
 		sb.WriteString("?")

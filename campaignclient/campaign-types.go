@@ -204,6 +204,10 @@ func (c *Campaign) MustToJSON() []byte {
 	return b
 }
 
+func WellFormCampaignId(id string) string {
+	return strings.ToUpper(id)
+}
+
 func DeserializeCampaign(b []byte) (*Campaign, error) {
 	ctx := Campaign{}
 	err := json.Unmarshal(b, &ctx)

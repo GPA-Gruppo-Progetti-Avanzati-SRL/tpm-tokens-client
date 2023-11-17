@@ -5,6 +5,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/businessview"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"net/http"
 	"net/url"
 	"strings"
@@ -72,7 +73,7 @@ func (c *Client) tokenViewApiUrl(apiPath string, tokenId string, qParams []har.N
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
 
-	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, tokenId, 1)
+	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, token.WellFormTokenId(tokenId), 1)
 	sb.WriteString(apiPath)
 
 	if len(qParams) > 0 {
@@ -97,7 +98,7 @@ func (c *Client) actorViewApiUrl(apiPath string, actorId string, qParams []har.N
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
 
-	apiPath = strings.Replace(apiPath, ActorIdPathPlaceHolder, actorId, 1)
+	apiPath = strings.Replace(apiPath, ActorIdPathPlaceHolder, businessview.WellFormActorId(actorId), 1)
 	sb.WriteString(apiPath)
 
 	if len(qParams) > 0 {

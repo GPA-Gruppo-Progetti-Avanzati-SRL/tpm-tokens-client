@@ -1,6 +1,9 @@
 package businessview
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"strings"
+)
 
 type BearerRef struct {
 	Id   string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
@@ -51,6 +54,10 @@ type Bearer struct {
 type Actor struct {
 	ActorId string   `yaml:"actor-id,omitempty" mapstructure:"actor-id,omitempty" json:"actor-id,omitempty"`
 	Bearers []Bearer `yaml:"contexts,omitempty" mapstructure:"contexts,omitempty" json:"contexts,omitempty"`
+}
+
+func WellFormActorId(id string) string {
+	return strings.ToUpper(id)
 }
 
 func DeserializeToken(b []byte) (*Token, error) {

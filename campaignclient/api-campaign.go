@@ -37,6 +37,7 @@ func (c *Client) GetCampaignById(reqCtx ApiRequestContext, ctxId string) (*Campa
 
 func (c *Client) NewCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct string) (*Campaign, error) {
 	const semLogContext = "campaign-client::new"
+	tokenCtx.Id = WellFormCampaignId(tokenCtx.Id)
 	ep := c.campaignApiUrl(CampaignNew, "", nil)
 
 	if ct == "" {
@@ -77,6 +78,7 @@ func (c *Client) NewCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct st
 
 func (c *Client) ReplaceCampaign(reqCtx ApiRequestContext, tokenCtx *Campaign, ct string) (*Campaign, error) {
 	const semLogContext = "campaign-client::replace"
+	tokenCtx.Id = WellFormCampaignId(tokenCtx.Id)
 	ep := c.campaignApiUrl(CampaignPut, tokenCtx.Id, nil)
 
 	if ct == "" {
@@ -161,7 +163,7 @@ func (c *Client) campaignApiUrl(apiPath string, ctxId string, qParams []har.Name
 	sb.WriteString(c.host.HostName)
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
-	sb.WriteString(strings.Replace(apiPath, CampaignIdPathPlaceHolder, ctxId, 1))
+	sb.WriteString(strings.Replace(apiPath, CampaignIdPathPlaceHolder, WellFormCampaignId(ctxId), 1))
 
 	if len(qParams) > 0 {
 		sb.WriteString("?")
