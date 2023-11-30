@@ -96,8 +96,9 @@ type Diagram struct {
 }
 
 type StateMachine struct {
-	Diagram *Diagram          `yaml:"diagram,omitempty" mapstructure:"diagram,omitempty" json:"diagram,omitempty"`
-	States  []StateDefinition `yaml:"states,omitempty" mapstructure:"states,omitempty" json:"states,omitempty"`
+	Diagram          *Diagram          `yaml:"diagram,omitempty" mapstructure:"diagram,omitempty" json:"diagram,omitempty"`
+	States           []StateDefinition `yaml:"states,omitempty" mapstructure:"states,omitempty" json:"states,omitempty"`
+	CatchTransitions []Transition      `yaml:"catch-transitions,omitempty" mapstructure:"catch-transitions,omitempty" json:"catch-transitions,omitempty"`
 }
 
 func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error) {

@@ -11,6 +11,7 @@ type TimerDefinition struct {
 	Actions     []ActionDefinition `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
 }
 
+// Timer the Timer type (and ActionDefinition) exists in three places: tpm-tokens-client, tpm-tokens and leas-cab-token-jobs
 type Timer struct {
 	Pkey            string           `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
 	Id              string           `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
