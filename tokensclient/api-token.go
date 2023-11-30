@@ -26,7 +26,7 @@ func (tok *TokenApiRequest) ToJSON() ([]byte, error) {
 func (c *Client) GetToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::get-token"
 
-	ep := c.tokenApiUrl(GetToken, ctxId, tokId, nil)
+	ep := c.tokenApiUrl(GetToken, ctxId, tokId, "", nil)
 
 	req, err := c.client.NewRequest(http.MethodGet, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -56,7 +56,7 @@ func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, tokenRequest *
 		op = "check"
 	}
 
-	ep := c.tokenApiUrl(NewToken, ctxId, "", []har.NameValuePair{{Name: "op", Value: op}})
+	ep := c.tokenApiUrl(NewToken, ctxId, "", "", []har.NameValuePair{{Name: "op", Value: op}})
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
@@ -98,7 +98,7 @@ func (c *Client) NewToken(reqCtx ApiRequestContext, ctxId string, tokenRequest *
 func (c *Client) DeleteToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*ApiResponse, error) {
 	const semLogContext = "tpm-tokens-client::delete-token"
 
-	ep := c.tokenApiUrl(DeleteToken, ctxId, tokId, nil)
+	ep := c.tokenApiUrl(DeleteToken, ctxId, tokId, "", nil)
 
 	req, err := c.client.NewRequest(http.MethodDelete, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -123,7 +123,7 @@ func (c *Client) DeleteToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::commit-token"
 
-	ep := c.tokenApiUrl(TokenCommit, ctxId, tokId, nil)
+	ep := c.tokenApiUrl(TokenCommit, ctxId, tokId, "", nil)
 
 	req, err := c.client.NewRequest(http.MethodPut, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -148,7 +148,7 @@ func (c *Client) CommitToken(reqCtx ApiRequestContext, ctxId string, tokId strin
 func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::commit-token"
 
-	ep := c.tokenApiUrl(TokenRollback, ctxId, tokId, nil)
+	ep := c.tokenApiUrl(TokenRollback, ctxId, tokId, "", nil)
 
 	req, err := c.client.NewRequest(http.MethodPut, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -171,9 +171,23 @@ func (c *Client) RollbackToken(reqCtx ApiRequestContext, ctxId string, tokId str
 }
 
 func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
+	return c.tokenNext(reqCtx, ctxId, tokId, "", tokenRequest, ct)
+}
+
+func (c *Client) TakeTransition(reqCtx ApiRequestContext, ctxId string, tokId string, transitionName string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
+	return c.tokenNext(reqCtx, ctxId, tokId, transitionName, tokenRequest, ct)
+}
+
+// tokenNext private method to handle both the actual next op and the takeTransition one.
+func (c *Client) tokenNext(reqCtx ApiRequestContext, ctxId string, tokId string, transitionName string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-next"
 
-	ep := c.tokenApiUrl(TokenNext, ctxId, tokId, nil)
+	var ep string
+	if transitionName == "" {
+		ep = c.tokenApiUrl(TokenNext, ctxId, tokId, "", nil)
+	} else {
+		ep = c.tokenApiUrl(TokenTakeTransition, ctxId, tokId, transitionName, nil)
+	}
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
@@ -215,7 +229,7 @@ func (c *Client) TokenNext(reqCtx ApiRequestContext, ctxId string, tokId string,
 func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string, tokenRequest *TokenApiRequest, ct string) (*token.Token, error) {
 	const semLogContext = "tpm-tokens-client::token-check"
 
-	ep := c.tokenApiUrl(TokenCheck, ctxId, tokId, nil)
+	ep := c.tokenApiUrl(TokenCheck, ctxId, tokId, "", nil)
 
 	if ct == "" {
 		ct = ContentTypeApplicationJson
@@ -254,7 +268,7 @@ func (c *Client) TokenCheck(reqCtx ApiRequestContext, ctxId string, tokId string
 	return resp, err
 }
 
-func (c *Client) tokenApiUrl(apiPath string, ctxId string, tokenId string, qParams []har.NameValuePair) string {
+func (c *Client) tokenApiUrl(apiPath string, ctxId string, tokenId string, transitionName string, qParams []har.NameValuePair) string {
 	var sb = strings.Builder{}
 	sb.WriteString(c.host.Scheme)
 	sb.WriteString("://")
@@ -264,6 +278,7 @@ func (c *Client) tokenApiUrl(apiPath string, ctxId string, tokenId string, qPara
 
 	apiPath = strings.Replace(apiPath, TokenContextIdPathPlaceHolder, token.WellFormTokenContextId(ctxId), 1)
 	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, token.WellFormTokenId(tokenId), 1)
+	apiPath = strings.Replace(apiPath, TransitionNamePathPlaceHolder, transitionName, 1)
 	sb.WriteString(apiPath)
 
 	if len(qParams) > 0 {
