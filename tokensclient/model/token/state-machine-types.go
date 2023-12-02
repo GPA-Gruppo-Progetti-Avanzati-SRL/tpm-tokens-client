@@ -29,6 +29,8 @@ const (
 type ActionDefinition struct {
 	ActionId   string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	ActionType ActionType             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	CtxId      string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
+	TokenId    string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
 	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 }
 
