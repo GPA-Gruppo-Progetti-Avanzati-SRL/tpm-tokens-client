@@ -89,7 +89,7 @@ type Transition struct {
 	Actions               []ActionDefinition     `yaml:"out-actions,omitempty" mapstructure:"out-actions,omitempty" json:"out-actions,omitempty"`
 	Bearers               []BearerRef            `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
 	Description           string                 `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	TimerDefinition       *TimerDefinition       `yaml:"timer-def,omitempty" mapstructure:"timer-def,omitempty" json:"timer-def,omitempty"`
+	TimerDefinitions      []TimerDefinition      `yaml:"timer-defs,omitempty" mapstructure:"timer-defs,omitempty" json:"timer-defs,omitempty"`
 }
 
 type Diagram struct {

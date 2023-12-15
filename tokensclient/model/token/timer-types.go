@@ -6,9 +6,10 @@ import (
 )
 
 type TimerDefinition struct {
-	Duration    int                `yaml:"duration,omitempty" mapstructure:"duration,omitempty" json:"duration,omitempty"`
-	Description string             `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	Actions     []ActionDefinition `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+	Duration      int                `yaml:"duration,omitempty" mapstructure:"duration,omitempty" json:"duration,omitempty"`
+	Description   string             `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Preconditions []ActionDefinition `yaml:"pre-conditions,omitempty" mapstructure:"pre-conditions,omitempty" json:"pre-conditions,omitempty"`
+	Actions       []ActionDefinition `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
 }
 
 // Timer the Timer type (and ActionDefinition) exists in three places: tpm-tokens-client, tpm-tokens and leas-cab-token-jobs

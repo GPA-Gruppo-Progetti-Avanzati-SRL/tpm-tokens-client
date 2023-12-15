@@ -92,17 +92,17 @@ type State struct {
 type ProcessVars map[string]interface{}
 
 type Event struct {
-	RequestId      string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
-	Name           string      `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
-	Description    string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
-	Typ            EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
-	State          State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
-	Ts             string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
-	ExpiryTs       string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
-	Vars           ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
-	Actions        []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
-	Bearers        []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
-	TimerReference *Timer      `yaml:"timer-ref,omitempty" mapstructure:"timer-ref,omitempty" json:"timer-ref,omitempty"`
+	RequestId       string      `yaml:"request-id,omitempty" mapstructure:"request-id,omitempty" json:"request-id,omitempty"`
+	Name            string      `yaml:"name,omitempty" mapstructure:"name,omitempty" json:"name,omitempty"`
+	Description     string      `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
+	Typ             EventType   `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	State           State       `yaml:"state,omitempty" mapstructure:"state,omitempty" json:"state,omitempty"`
+	Ts              string      `yaml:"ts,omitempty" mapstructure:"ts,omitempty" json:"ts,omitempty"`
+	ExpiryTs        string      `yaml:"expiry-ts,omitempty" mapstructure:"expiry-ts,omitempty" json:"expiry-ts,omitempty"`
+	Vars            ProcessVars `yaml:"vars,omitempty" mapstructure:"vars,omitempty" json:"vars,omitempty"`
+	Actions         []Action    `yaml:"actions,omitempty" mapstructure:"actions,omitempty" json:"actions,omitempty"`
+	Bearers         []BearerRef `yaml:"bearers,omitempty" mapstructure:"bearers,omitempty" json:"bearers,omitempty"`
+	TimerReferences []Timer     `yaml:"timer-refs,omitempty" mapstructure:"timer-refs,omitempty" json:"timer-refs,omitempty"`
 }
 
 func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bool) {
@@ -168,40 +168,51 @@ func WellFormTokenId(id string) string {
 	return strings.ToUpper(id)
 }
 
-func (tok *Token) FindOutdatedTimers() []*Timer {
-	var tms []*Timer
+func (tok *Token) FindOutdatedTimers() []Timer {
+	var tms []Timer
 	for i := 0; i < len(tok.Events)-1; i++ {
-		if tok.Events[i].TimerReference != nil {
-			tms = append(tms, tok.Events[i].TimerReference)
+		for _, tm := range tok.Events[i].TimerReferences {
+			tms = append(tms, tm)
 		}
 	}
 
 	return tms
 }
 
-func (tok *Token) FindActiveTimer() *Timer {
-
-	var tm *Timer
+func (tok *Token) FindActiveTimers(ctxId, tokId string) []Timer {
+	var tms []Timer
 	ndx := tok.FindLastEventIndex()
 	if ndx >= 0 {
-		tm = tok.Events[ndx].TimerReference
+		for _, tm := range tok.Events[ndx].TimerReferences {
+			if !tm.Outdated && tm.TimerDefinition != nil {
+				tm.CtxId = ctxId
+				tm.TokenId = tokId
+				tms = append(tms, tm)
+			}
+		}
 	}
 
-	if tm != nil && !tm.Outdated && tm.TimerDefinition != nil {
-		return tm
-	}
-
-	return nil
+	return tms
 }
 
 func (tok *Token) MarkTimersAsOutdated() {
 	for i := 0; i < len(tok.Events); i++ {
-		if tok.Events[i].TimerReference != nil {
-			tok.Events[i].TimerReference.MarkAsOutdated()
-			// tok.Events[i].TimerReference.Outdated = true
-			// tok.Events[i].TimerReference.TimerDefinition = nil
+		/*
+			if i == (len(tok.Events)-1) && clearLast {
+				tok.Events[i].TimerReference = nil
+			} else {
+		*/
+		for j := 0; j < len(tok.Events[i].TimerReferences); j++ {
+			tok.Events[i].TimerReferences[j].MarkAsOutdated()
 		}
+
+		/*
+			if tok.Events[i].TimerReference != nil {
+				tok.Events[i].TimerReference.MarkAsOutdated()
+			}
+		*/
 	}
+	//}
 }
 
 func (tok *Token) IsPending() bool {
