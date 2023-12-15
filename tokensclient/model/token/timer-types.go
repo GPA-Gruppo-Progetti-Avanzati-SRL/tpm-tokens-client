@@ -5,6 +5,12 @@ import (
 	"strings"
 )
 
+const (
+	StatusTimerActive    = "active"
+	StatusTimerProcessed = "processed"
+	StatusTimerFailed    = "failed"
+)
+
 type TimerDefinition struct {
 	Duration      int                `yaml:"duration,omitempty" mapstructure:"duration,omitempty" json:"duration,omitempty"`
 	Description   string             `yaml:"description,omitempty" mapstructure:"description,omitempty" json:"description,omitempty"`
@@ -18,6 +24,7 @@ type Timer struct {
 	Id              string           `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	CtxId           string           `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
 	TokenId         string           `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
+	Status          string           `yaml:"status,omitempty" mapstructure:"status,omitempty" json:"status,omitempty"`
 	Expires         string           `yaml:"expires,omitempty" mapstructure:"expires,omitempty" json:"expires,omitempty"`
 	Outdated        bool             `yaml:"outdated,omitempty" mapstructure:"outdated,omitempty" json:"outdated,omitempty"`
 	TimerDefinition *TimerDefinition `yaml:"definition,omitempty" mapstructure:"definition,omitempty" json:"definition,omitempty"`
