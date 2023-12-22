@@ -62,3 +62,13 @@ func DeserializeTimer(b []byte) (*Timer, error) {
 
 	return &timer, nil
 }
+
+func DeserializeTimers(b []byte) ([]Timer, error) {
+	var timers []Timer
+	err := json.Unmarshal(b, &timers)
+	if err != nil {
+		return nil, err
+	}
+
+	return timers, nil
+}
