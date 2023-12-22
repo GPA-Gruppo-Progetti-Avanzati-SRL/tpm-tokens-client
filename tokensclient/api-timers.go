@@ -10,8 +10,8 @@ import (
 	"strings"
 )
 
-func (c *Client) CreateTimer(reqCtx ApiRequestContext, ctxId string, tokId string) (*token.Timer, error) {
-	const semLogContext = "tpm-tokens-client::post-create-timer"
+func (c *Client) CreateTimers(reqCtx ApiRequestContext, ctxId string, tokId string) ([]token.Timer, error) {
+	const semLogContext = "tpm-tokens-client::post-create-timers"
 
 	ep := c.timerApiUrl(TokenTimerCreate, ctxId, tokId, nil)
 
@@ -31,7 +31,7 @@ func (c *Client) CreateTimer(reqCtx ApiRequestContext, ctxId string, tokId strin
 		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 	}
 
-	resp, err := DeserializeTokenTimerResponseBody(harEntry)
+	resp, err := DeserializeTokenTimersResponseBody(harEntry)
 	return resp, err
 }
 
