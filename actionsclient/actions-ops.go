@@ -6,6 +6,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util/expression"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
+	"github.com/google/uuid"
 	"github.com/rs/zerolog/log"
 	"net/http"
 	"strings"
@@ -40,14 +41,22 @@ func (lks *LinkedService) NewClient(cfg Config, expressionCtx *expression.Contex
 			return nil, err
 		}
 		resolvedCfg.Path = fmt.Sprint(v)
+	}
 
-		resolvedCfg.Headers = nil
-		for i := range cfg.Headers {
-			v, err := expressionCtx.EvalOne(cfg.Headers[i].Value)
-			if err != nil {
-				return nil, err
+	resolvedCfg.Headers = nil
+	for i := range cfg.Headers {
+		if cfg.Headers[i].Value == "uuid" {
+			resolvedCfg.Headers = append(resolvedCfg.Headers, restclient.Header{Name: cfg.Headers[i].Name, Value: uuid.New().String()})
+		} else {
+			if expressionCtx != nil {
+				v, err := expressionCtx.EvalOne(cfg.Headers[i].Value)
+				if err != nil {
+					return nil, err
+				}
+				resolvedCfg.Headers = append(resolvedCfg.Headers, restclient.Header{Name: cfg.Headers[i].Name, Value: fmt.Sprint(v)})
+			} else {
+				resolvedCfg.Headers = append(resolvedCfg.Headers, restclient.Header{Name: cfg.Headers[i].Name, Value: cfg.Headers[i].Value})
 			}
-			resolvedCfg.Headers = append(resolvedCfg.Headers, restclient.Header{Name: cfg.Headers[i].Name, Value: fmt.Sprint(v)})
 		}
 	}
 
