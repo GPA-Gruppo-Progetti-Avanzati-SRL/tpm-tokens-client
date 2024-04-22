@@ -172,7 +172,7 @@ func (ctx *TokenContext) IsActive() bool {
 	return ctx.Timeline.IsInRange()
 }
 
-func (ctx *TokenContext) EvaluateInActions(tok *Token, params map[string]interface{}) ([]Action, error) {
+func (ctx *TokenContext) EvaluateInActions(scope string, tok *Token, params map[string]interface{}) ([]Action, error) {
 
 	const semLogContext = "token-context::evaluate-in-actions"
 
@@ -207,6 +207,6 @@ func (ctx *TokenContext) EvaluateInActions(tok *Token, params map[string]interfa
 		return nil, err
 	}
 
-	acts, err := EvaluateActionDefinitions(sd.Actions, eCtx, ActionTypeIn, false)
+	acts, err := EvaluateActionDefinitions(scope, sd.Actions, eCtx, ActionTypeIn, false)
 	return acts, nil
 }

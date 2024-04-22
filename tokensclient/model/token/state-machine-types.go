@@ -3,6 +3,7 @@ package token
 import (
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common/util/expression"
+	"github.com/rs/zerolog/log"
 )
 
 type StateType string
@@ -29,9 +30,18 @@ const (
 type ActionDefinition struct {
 	ActionId   string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	ActionType ActionType             `yaml:"type,omitempty" mapstructure:"type,omitempty" json:"type,omitempty"`
+	Scope      string                 `yaml:"scope,omitempty" mapstructure:"scope,omitempty" json:"scope,omitempty"`
 	CtxId      string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
 	TokenId    string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
 	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
+}
+
+func (ad *ActionDefinition) IsInScope(scope string) bool {
+	if ad.Scope == "" || ad.Scope == scope {
+		return true
+	}
+
+	return false
 }
 
 type Action ActionDefinition
@@ -113,15 +123,21 @@ func (sm *StateMachine) FindStateDefinition(code string) (StateDefinition, error
 	return StateDefinition{}, NewTokError(TokenErrorContextDefinition, fmt.Sprintf("cannot find definition of state: %s", code))
 }
 
-func EvaluateActionDefinitions(actions []ActionDefinition, eCtx *expression.Context, actionType ActionType, takeFirstOnly bool) ([]Action, error) {
+func EvaluateActionDefinitions(scope string, actions []ActionDefinition, eCtx *expression.Context, actionType ActionType, takeFirstOnly bool) ([]Action, error) {
+
+	const semLogContext = "state-machine::evaluate-action-definitions"
+
 	if len(actions) == 0 {
 		return nil, nil
 	}
 
 	var acts []Action
 	for _, a := range actions {
-
 		if a.ActionType == actionType {
+			if !a.IsInScope(scope) {
+				log.Info().Str("scope-wanted", scope).Str("cops-actial", a.Scope).Str("action-id", a.ActionId).Msg(semLogContext)
+				continue
+			}
 			v, err := EvalProperties(eCtx, a.Properties)
 			if err != nil {
 				return nil, err
