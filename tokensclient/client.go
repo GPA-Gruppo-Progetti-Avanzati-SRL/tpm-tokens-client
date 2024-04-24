@@ -6,6 +6,7 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/businessview"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/facts"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
@@ -264,6 +265,38 @@ func DeserializeActorViewContentResponse(resp *har.Entry) (*businessview.Actor, 
 	switch resp.Response.Status {
 	case http.StatusOK:
 		resultObj, err = businessview.DeserializeActor(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
+func DeserializeQueryFactsContentResponse(resp *har.Entry) (*facts.FactsQueryResponse, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-query-facts-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *facts.FactsQueryResponse
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = facts.DeserializeFactsQueryResponse(resp.Response.Content.Data)
 		if err != nil {
 			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
 		}
