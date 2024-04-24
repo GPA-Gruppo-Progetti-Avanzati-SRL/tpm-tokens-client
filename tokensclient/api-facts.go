@@ -1,6 +1,7 @@
 package tokensclient
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
@@ -11,6 +12,13 @@ import (
 	"net/url"
 	"strings"
 )
+
+type FactApiRequest struct {
+	Id         string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	Pkey       string                 `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
+	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
+	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
+}
 
 func (c *Client) QueryFacts(reqCtx ApiRequestContext, factsGroup string) (*facts.FactsQueryResponse, error) {
 	const semLogContext = "tpm-tokens-client::query-facts"
@@ -34,6 +42,37 @@ func (c *Client) QueryFacts(reqCtx ApiRequestContext, factsGroup string) (*facts
 	}
 
 	resp, err := DeserializeQueryFactsContentResponse(harEntry)
+	return resp, err
+}
+
+func (c *Client) AddFact2Group(reqCtx ApiRequestContext, factsGroup string, fact *FactApiRequest) (*facts.Fact, error) {
+	const semLogContext = "tpm-tokens-client::add-fact-2-group"
+	log.Trace().Msg(semLogContext)
+
+	ep := c.factsApiUrl(FactAdd2Group, factsGroup, "", nil)
+	ct := ContentTypeApplicationJson
+
+	b, err := json.Marshal(fact)
+	if err != nil {
+		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
+	}
+
+	req, err := c.client.NewRequest(http.MethodPost, ep, b, reqCtx.getHeaders(ct), nil)
+	if err != nil {
+		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
+	}
+
+	harEntry, err := c.client.Execute(req,
+		restclient.ExecutionWithOpName("add-fact-2-group"),
+		restclient.ExecutionWithRequestId(reqCtx.RequestId),
+		restclient.ExecutionWithSpan(reqCtx.Span),
+		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
+	// c.harEntries = append(c.harEntries, harEntry)
+	if err != nil {
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	resp, err := DeserializeFactContentResponse(harEntry)
 	return resp, err
 }
 

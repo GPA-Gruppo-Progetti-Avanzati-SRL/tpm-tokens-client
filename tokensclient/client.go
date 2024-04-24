@@ -315,6 +315,38 @@ func DeserializeQueryFactsContentResponse(resp *har.Entry) (*facts.FactsQueryRes
 	return resultObj, nil
 }
 
+func DeserializeFactContentResponse(resp *har.Entry) (*facts.Fact, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-fact-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *facts.Fact
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = facts.DeserializeFact(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
 func DeserializeApiResponse(resp *har.Entry) (*ApiResponse, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-api-response"

@@ -44,6 +44,7 @@ const (
 	ApiFactsBasePath = "/api/v1/facts/"
 	FactsQueryGroup  = ApiFactsBasePath + FactGroupPathPlaceHolder
 	FactGet          = ApiFactsBasePath + FactGroupPathPlaceHolder + "/" + FactIdPathPlaceHolder
+	FactAdd2Group    = ApiFactsBasePath + FactGroupPathPlaceHolder
 )
 
 type HostInfo struct {
