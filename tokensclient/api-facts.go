@@ -14,8 +14,8 @@ import (
 )
 
 type FactApiRequest struct {
-	Id         string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
-	Group      string                 `yaml:"group,omitempty" mapstructure:"group,omitempty" json:"group,omitempty"`
+	Id string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	// Group      string                 `yaml:"group,omitempty" mapstructure:"group,omitempty" json:"group,omitempty"`
 	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
