@@ -105,7 +105,6 @@ type Event struct {
 	TimerReferences []Timer     `yaml:"timer-refs,omitempty" mapstructure:"timer-refs,omitempty" json:"timer-refs,omitempty"`
 }
 
-/*
 func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bool) {
 	for _, a := range evt.Actions {
 		if a.ActionType == actionType && a.ActionId == actionId {
@@ -114,7 +113,6 @@ func (evt *Event) FindAction(actionId string, actionType ActionType) (Action, bo
 	}
 	return Action{}, false
 }
-*/
 
 func (evt *Event) IsPending() bool {
 	return evt.State.Pending
