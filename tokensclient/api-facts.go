@@ -20,11 +20,11 @@ type FactApiRequest struct {
 	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
-func (c *Client) QueryFacts(reqCtx ApiRequestContext, factsGroup string) (*facts.FactsQueryResponse, error) {
+func (c *Client) QueryFacts(reqCtx ApiRequestContext, factsClass, factsGroup string) (*facts.FactsQueryResponse, error) {
 	const semLogContext = "tpm-tokens-client::query-facts"
 	log.Trace().Msg(semLogContext)
 
-	ep := c.factsApiUrl(FactsQueryGroup, factsGroup, "", nil)
+	ep := c.factsApiUrl(FactsQueryGroup, factsClass, factsGroup, "", nil)
 
 	req, err := c.client.NewRequest(http.MethodGet, ep, nil, reqCtx.getHeaders(""), nil)
 	if err != nil {
@@ -45,11 +45,11 @@ func (c *Client) QueryFacts(reqCtx ApiRequestContext, factsGroup string) (*facts
 	return resp, err
 }
 
-func (c *Client) AddFact2Group(reqCtx ApiRequestContext, factsGroup string, fact *FactApiRequest) (*facts.Fact, error) {
+func (c *Client) AddFact2Group(reqCtx ApiRequestContext, factsClass, factsGroup string, fact *FactApiRequest) (*facts.Fact, error) {
 	const semLogContext = "tpm-tokens-client::add-fact-2-group"
 	log.Trace().Msg(semLogContext)
 
-	ep := c.factsApiUrl(FactAdd2Group, factsGroup, "", nil)
+	ep := c.factsApiUrl(FactAdd2Group, factsClass, factsGroup, "", nil)
 	ct := ContentTypeApplicationJson
 
 	b, err := json.Marshal(fact)
@@ -76,7 +76,7 @@ func (c *Client) AddFact2Group(reqCtx ApiRequestContext, factsGroup string, fact
 	return resp, err
 }
 
-func (c *Client) factsApiUrl(apiPath string, factGroup, factId string, qParams []har.NameValuePair) string {
+func (c *Client) factsApiUrl(apiPath string, factsClass, factGroup, factId string, qParams []har.NameValuePair) string {
 	var sb = strings.Builder{}
 	sb.WriteString(c.host.Scheme)
 	sb.WriteString("://")
@@ -84,6 +84,7 @@ func (c *Client) factsApiUrl(apiPath string, factGroup, factId string, qParams [
 	sb.WriteString(":")
 	sb.WriteString(fmt.Sprint(c.host.Port))
 
+	apiPath = strings.Replace(apiPath, FactClassPathPlaceHolder, token.WellFormTokenContextId(factsClass), 1)
 	apiPath = strings.Replace(apiPath, FactGroupPathPlaceHolder, token.WellFormTokenContextId(factGroup), 1)
 	apiPath = strings.Replace(apiPath, FactIdPathPlaceHolder, token.WellFormTokenId(factId), 1)
 	sb.WriteString(apiPath)

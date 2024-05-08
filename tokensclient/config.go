@@ -7,6 +7,7 @@ const (
 	TokenContextIdPathPlaceHolder = "{context-id}"
 	TokenIdPathPlaceHolder        = "{token-id}"
 	TransitionNamePathPlaceHolder = "{transition-name}"
+	FactClassPathPlaceHolder      = "{fact-class}"
 	FactGroupPathPlaceHolder      = "{fact-group}"
 	FactIdPathPlaceHolder         = "{fact-id}"
 
@@ -42,9 +43,9 @@ const (
 	GetActorView    = ApiViewBasePath + "/actors/" + ActorIdPathPlaceHolder
 
 	ApiFactsBasePath = "/api/v1/facts/"
-	FactsQueryGroup  = ApiFactsBasePath + FactGroupPathPlaceHolder
-	FactGet          = ApiFactsBasePath + FactGroupPathPlaceHolder + "/" + FactIdPathPlaceHolder
-	FactAdd2Group    = ApiFactsBasePath + FactGroupPathPlaceHolder
+	FactsQueryGroup  = ApiFactsBasePath + FactClassPathPlaceHolder + "/" + FactGroupPathPlaceHolder
+	FactGet          = ApiFactsBasePath + FactClassPathPlaceHolder + "/" + FactGroupPathPlaceHolder + "/" + FactIdPathPlaceHolder
+	FactAdd2Group    = ApiFactsBasePath + FactClassPathPlaceHolder + "/" + FactGroupPathPlaceHolder
 )
 
 type HostInfo struct {
