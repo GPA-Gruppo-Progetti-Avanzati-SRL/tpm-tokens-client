@@ -1,6 +1,9 @@
 package facts
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"strings"
+)
 
 type Fact struct {
 	Class      string                 `yaml:"class,omitempty" mapstructure:"class,omitempty" json:"class,omitempty"`
@@ -11,6 +14,10 @@ type Fact struct {
 	TokenId    string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
 	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
 	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
+}
+
+func FactPartitionKey(factClass, factGroup string) string {
+	return strings.Join([]string{factClass, factGroup}, "-")
 }
 
 func (ctx *Fact) ToJSON() ([]byte, error) {
