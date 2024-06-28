@@ -6,14 +6,16 @@ import (
 )
 
 type Fact struct {
-	Class      string                 `yaml:"class,omitempty" mapstructure:"class,omitempty" json:"class,omitempty"`
-	Group      string                 `yaml:"group,omitempty" mapstructure:"group,omitempty" json:"group,omitempty"`
-	Id         string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
-	PKey       string                 `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
-	CtxId      string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
-	TokenId    string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
-	Properties map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
-	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
+	Class             string                 `yaml:"class,omitempty" mapstructure:"class,omitempty" json:"class,omitempty"`
+	Group             string                 `yaml:"group,omitempty" mapstructure:"group,omitempty" json:"group,omitempty"`
+	Id                string                 `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
+	PKey              string                 `yaml:"pkey,omitempty" mapstructure:"pkey,omitempty" json:"pkey,omitempty"`
+	CtxId             string                 `yaml:"ctx-id,omitempty" mapstructure:"ctx-id,omitempty" json:"ctx-id,omitempty"`
+	TokenId           string                 `yaml:"token-id,omitempty" mapstructure:"token-id,omitempty" json:"token-id,omitempty"`
+	Status            string                 `yaml:"status,omitempty" mapstructure:"status,omitempty" json:"status,omitempty"`
+	Properties        map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
+	NotificationGroup string                 `yaml:"notification-group,omitempty" mapstructure:"notification-group,omitempty" json:"notification-group,omitempty"`
+	TTL               int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
 func FactPartitionKey(factClass, factGroup string) string {
