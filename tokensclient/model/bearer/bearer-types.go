@@ -70,6 +70,11 @@ func NewBearer(actorId, actorScope, contextId string) Bearer {
 	return b
 }
 
+func ActorIdBase(actorId string) string {
+	actorId, _, _ = ParseActorId(actorId)
+	return actorId
+}
+
 func ActorIdWithScope(actorId, actorScope string) string {
 	if strings.Index(actorId, ActorScopeMatrixParamValue) < 0 && actorScope != "" {
 		actorId = fmt.Sprintf("%s%s%s", actorId, ActorScopeMatrixParamValue, actorScope)
