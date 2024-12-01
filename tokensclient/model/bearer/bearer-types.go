@@ -62,7 +62,7 @@ const (
 func NewBearer(actorId, actorScope, contextId string) Bearer {
 	var b Bearer
 	if strings.Index(actorId, ActorScopeMatrixParamValue) >= 0 {
-		actorId, actorScope, _, _ = ParseBearerId(actorId)
+		actorId, actorScope, _ = ParseActorId(actorId)
 		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorScope, TokenContextId: contextId, TTL: -1}
 	} else {
 		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, ActorScope: actorScope, TokenContextId: contextId, TTL: -1}
@@ -76,6 +76,17 @@ func ActorIdWithScope(actorId, actorScope string) string {
 	}
 
 	return actorId
+}
+
+func ParseActorId(actorId string) (string, string, error) {
+	const semLogContext = "bearer::parse-actor-id"
+
+	var actorScope string
+	if ndx := strings.Index(actorId, ActorScopeMatrixParamValue); ndx >= 0 {
+		actorScope = actorId[ndx+len(ActorScopeMatrixParamValue):]
+		actorId = actorId[:ndx]
+	}
+	return actorId, actorScope, nil
 }
 
 func Id(actorId, actorScope, contextId string) string {
