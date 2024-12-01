@@ -63,7 +63,7 @@ func NewBearer(actorId, actorScope, contextId string) Bearer {
 	var b Bearer
 	if strings.Index(actorId, ActorScopeMatrixParamValue) >= 0 {
 		actorId, actorScope, _ = ParseActorId(actorId)
-		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorScope, TokenContextId: contextId, TTL: -1}
+		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, ActorScope: actorScope, TokenContextId: contextId, TTL: -1}
 	} else {
 		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, ActorScope: actorScope, TokenContextId: contextId, TTL: -1}
 	}
