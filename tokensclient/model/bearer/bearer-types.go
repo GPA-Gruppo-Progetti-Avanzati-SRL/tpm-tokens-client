@@ -106,6 +106,12 @@ func ParseBearerId(bearerId string) (string, string, string, error) {
 }
 
 func WellFormBearerId(id string) string {
+	const semLogContext = "bearer::well-form-id"
+
+	if ndx := strings.Index(id, ActorScopeMatrixParamValue); ndx >= 0 {
+		return fmt.Sprintf("%s%s%s", strings.ToUpper(id[:ndx]), ActorScopeMatrixParamValue, strings.ToUpper(id[ndx+1:]))
+	}
+
 	return strings.ToUpper(id)
 }
 
