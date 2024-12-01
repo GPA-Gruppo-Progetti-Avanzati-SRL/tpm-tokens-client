@@ -6,7 +6,6 @@ import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/har"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
-	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/businessview"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 	"github.com/rs/zerolog/log"
 	"net/http"
@@ -237,7 +236,7 @@ func (c *Client) bearerApiUrl(apiPath string, actorId, ctxId, tokId string, qPar
 	sb.WriteString(fmt.Sprint(c.host.Port))
 
 	apiPath = strings.Replace(apiPath, TokenContextIdPathPlaceHolder, token.WellFormTokenContextId(ctxId), 1)
-	apiPath = strings.Replace(apiPath, ActorIdPathPlaceHolder, businessview.WellFormActorId(actorId), 1)
+	apiPath = strings.Replace(apiPath, ActorIdPathPlaceHolder, bearer.WellFormBearerId(actorId), 1)
 	apiPath = strings.Replace(apiPath, TokenIdPathPlaceHolder, token.WellFormTokenId(tokId), 1)
 	sb.WriteString(apiPath)
 
