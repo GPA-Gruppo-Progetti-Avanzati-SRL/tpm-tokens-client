@@ -31,6 +31,7 @@ const (
 	TokenTakeTransition = TokenBasePath + "/" + TokenIdPathPlaceHolder + "/take/" + TransitionNamePathPlaceHolder
 
 	BearerBasePath                       = "/api/v1/bearers"
+	BearersByActorId                     = BearerBasePath + "/" + ActorIdPathPlaceHolder
 	BearerContextGet                     = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
 	BearerContextPost                    = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder
 	BearerContextPut                     = BearerBasePath + "/" + ActorIdPathPlaceHolder + "/" + TokenContextIdPathPlaceHolder

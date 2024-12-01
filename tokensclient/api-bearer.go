@@ -21,6 +21,31 @@ type BearerApiRequest struct {
 	TTL        int                    `yaml:"ttl,omitempty" mapstructure:"ttl,omitempty" json:"ttl,omitempty"`
 }
 
+func (c *Client) QueryBearers(reqCtx ApiRequestContext, actorId string) (*bearer.BearersQueryResponse, error) {
+	const semLogContext = "tpm-tokens-client::query-bearers"
+	log.Trace().Msg(semLogContext)
+
+	ep := c.bearerApiUrl(BearersByActorId, actorId, "", "", nil)
+
+	req, err := c.client.NewRequest(http.MethodGet, ep, nil, reqCtx.getHeaders(""), nil)
+	if err != nil {
+		return nil, NewBadRequestError(WithErrorMessage(err.Error()))
+	}
+
+	harEntry, err := c.client.Execute(req,
+		restclient.ExecutionWithOpName("client-query-bearers"),
+		restclient.ExecutionWithRequestId(reqCtx.RequestId),
+		restclient.ExecutionWithSpan(reqCtx.Span),
+		restclient.ExecutionWithHarSpan(reqCtx.HarSpan))
+	// c.harEntries = append(c.harEntries, harEntry)
+	if err != nil {
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	resp, err := DeserializeQueryBearersContentResponse(harEntry)
+	return resp, err
+}
+
 func (c *Client) GetBearerInContext(reqCtx ApiRequestContext, actorId, ctxId string) (*bearer.Bearer, error) {
 	const semLogContext = "tpm-tokens-client::get-bearer-in-ctx"
 	log.Trace().Msg(semLogContext)

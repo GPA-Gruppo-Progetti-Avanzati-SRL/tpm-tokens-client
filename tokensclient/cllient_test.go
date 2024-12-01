@@ -171,7 +171,7 @@ func executeTestTokenClient(t *testing.T, cli *tokensclient.Client, tokenContext
 
 var bearerTestCase001 = bearer.Bearer{
 	Pkey:           "MINNIE",
-	TokenContextId: "BPMGM1",
+	TokenContextId: "BPTST1",
 	Properties:     nil,
 }
 
@@ -231,6 +231,10 @@ func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContex
 	resp, err = cli.GetBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId)
 	require.NoError(t, err)
 	t.Log(resp)
+
+	queryResp, err := cli.QueryBearers(apiRequestCtx, bearerTestCase001.Pkey)
+	require.NoError(t, err)
+	t.Log(queryResp)
 
 	resp, err = cli.RemoveTokenFromBearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID", "")
 	require.NoError(t, err)

@@ -25,6 +25,7 @@ type Bearer struct {
 	Pkey           string                 `yaml:"pkey,omitempty" mapstructure:"pkey" json:"pkey,omitempty"`
 	TokenContextId string                 `yaml:"tok-ctx-id,omitempty" mapstructure:"tok-ctx-id,omitempty" json:"tok-ctx-id,omitempty"`
 	ActorId        string                 `yaml:"actor-id,omitempty" mapstructure:"actor-id,omitempty" json:"actor-id,omitempty"`
+	ActorScope     string                 `yaml:"actor-scope,omitempty" mapstructure:"actor-scope,omitempty" json:"actor-scope,omitempty"`
 	Origin         string                 `yaml:"origin,omitempty" mapstructure:"origin,omitempty" json:"origin,omitempty"`
 	TokenRefs      []TokenRef             `yaml:"tok-refs,omitempty" mapstructure:"tok-refs,omitempty" json:"tok-refs,omitempty"`
 	Properties     map[string]interface{} `yaml:"properties,omitempty" mapstructure:"properties,omitempty" json:"properties,omitempty"`
@@ -59,7 +60,7 @@ const (
 )
 
 func NewBearer(actorId, actorScope, contextId string) Bearer {
-	return Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, TokenContextId: contextId, TTL: -1}
+	return Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, TokenContextId: contextId, TTL: -1}
 }
 
 func ActorIdWithScope(actorId, actorScope string) string {
@@ -161,4 +162,20 @@ func (ber *Bearer) RemoveToken(tokId string) bool {
 	}
 
 	return false
+}
+
+type BearersQueryResponse struct {
+	RespRid   string   `json:"_rid" yaml:"_rid"`
+	RespCount int      `json:"_count" yaml:"_count"`
+	Documents []Bearer `json:"documents,omitempty" yaml:"documents,omitempty"`
+}
+
+func DeserializeBearersQueryResponse(b []byte) (*BearersQueryResponse, error) {
+	ctx := BearersQueryResponse{}
+	err := json.Unmarshal(b, &ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &ctx, nil
 }

@@ -91,6 +91,38 @@ func DeserializeTokenContextContentResponse(resp *har.Entry) (*token.TokenContex
 	return resultObj, nil
 }
 
+func DeserializeQueryBearersContentResponse(resp *har.Entry) (*bearer.BearersQueryResponse, error) {
+
+	const semLogContext = "tokens-api-client::deserialize-query-facts-response"
+	if resp == nil || resp.Response == nil || resp.Response.Content == nil || resp.Response.Content.Data == nil {
+		err := errors.New("cannot deserialize null response")
+		log.Error().Err(err).Msg(semLogContext)
+		return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+	}
+
+	var resultObj *bearer.BearersQueryResponse
+	var err error
+	switch resp.Response.Status {
+	case http.StatusOK:
+		resultObj, err = bearer.DeserializeBearersQueryResponse(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+
+	default:
+		var apiResponse ApiResponse
+		apiResponse, err = DeserApiResponseFromJson(resp.Response.Content.Data)
+		if err != nil {
+			return nil, NewExecutableServerError(WithErrorMessage(err.Error()))
+		}
+		apiResponse.StatusCode = resp.Response.Status
+		err = &apiResponse
+		return nil, err
+	}
+
+	return resultObj, nil
+}
+
 func DeserializeBearerContentResponse(resp *har.Entry) (*bearer.Bearer, error) {
 
 	const semLogContext = "tokens-api-client::deserialize-bearer-response"
