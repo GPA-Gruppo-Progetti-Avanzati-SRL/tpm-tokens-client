@@ -60,7 +60,14 @@ const (
 )
 
 func NewBearer(actorId, actorScope, contextId string) Bearer {
-	return Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, TokenContextId: contextId, TTL: -1}
+	var b Bearer
+	if strings.Index(actorId, ActorScopeMatrixParamValue) >= 0 {
+		actorId, actorScope, _, _ = ParseBearerId(actorId)
+		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorScope, TokenContextId: contextId, TTL: -1}
+	} else {
+		b = Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, ActorId: actorId, ActorScope: actorScope, TokenContextId: contextId, TTL: -1}
+	}
+	return b
 }
 
 func ActorIdWithScope(actorId, actorScope string) string {
@@ -78,21 +85,21 @@ func Id(actorId, actorScope, contextId string) string {
 	return strings.Join([]string{actorId, contextId}, "-")
 }
 
-func ParseBearerId(bearerId string) (string, []string, string, error) {
+func ParseBearerId(bearerId string) (string, string, string, error) {
 	const semLogContext = "bearer::parse-bearer-id"
 
 	comps := strings.Split(bearerId, "-")
 	if len(comps) != 2 {
 		err := errors.New("invalid bearer id")
 		log.Error().Err(err).Str("bearer-id", bearerId).Msg(semLogContext)
-		return bearerId, nil, "", err
+		return bearerId, "", "", err
 	}
 
 	actorId := comps[0]
 	campaignId := comps[1]
-	var actorScope []string
+	var actorScope string
 	if ndx := strings.Index(comps[0], ActorScopeMatrixParamValue); ndx >= 0 {
-		actorScope = strings.Split(comps[0][ndx+len(ActorScopeMatrixParamValue):], ",")
+		actorScope = comps[0][ndx+len(ActorScopeMatrixParamValue):]
 		actorId = comps[0][:ndx]
 	}
 	return actorId, actorScope, campaignId, nil
