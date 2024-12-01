@@ -62,6 +62,14 @@ func NewBearer(actorId, actorScope, contextId string) Bearer {
 	return Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, TokenContextId: contextId, TTL: -1}
 }
 
+func ActorIdWithScope(actorId, actorScope string) string {
+	if strings.Index(actorId, ActorScopeMatrixParamValue) < 0 && actorScope != "" {
+		actorId = fmt.Sprintf("%s%s%s", actorId, ActorScopeMatrixParamValue, actorScope)
+	}
+
+	return actorId
+}
+
 func Id(actorId, actorScope, contextId string) string {
 	if strings.Index(actorId, ActorScopeMatrixParamValue) < 0 && actorScope != "" {
 		actorId = fmt.Sprintf("%s%s%s", actorId, ActorScopeMatrixParamValue, actorScope)
