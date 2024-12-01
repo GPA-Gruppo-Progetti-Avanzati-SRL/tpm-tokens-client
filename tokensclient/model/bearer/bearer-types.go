@@ -2,6 +2,8 @@ package bearer
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/rs/zerolog/log"
 
 	"strings"
@@ -52,12 +54,39 @@ func DeserializeBearer(b []byte) (*Bearer, error) {
 	return &ctx, nil
 }
 
-func NewBearer(bearerId, contextId string) Bearer {
-	return Bearer{Id: Id(bearerId, contextId), Pkey: bearerId, TokenContextId: contextId, TTL: -1}
+const (
+	ActorScopeMatrixParamValue = ";scope="
+)
+
+func NewBearer(actorId, actorScope, contextId string) Bearer {
+	return Bearer{Id: Id(actorId, actorScope, contextId), Pkey: actorId, TokenContextId: contextId, TTL: -1}
 }
 
-func Id(bearerId, contextId string) string {
-	return strings.Join([]string{bearerId, contextId}, "-")
+func Id(actorId, actorScope, contextId string) string {
+	if strings.Index(actorId, ActorScopeMatrixParamValue) < 0 && actorScope != "" {
+		actorId = fmt.Sprintf("%s%s%s", actorId, ActorScopeMatrixParamValue, actorScope)
+	}
+	return strings.Join([]string{actorId, contextId}, "-")
+}
+
+func ParseBearerId(bearerId string) (string, []string, string, error) {
+	const semLogContext = "bearer::parse-bearer-id"
+
+	comps := strings.Split(bearerId, "-")
+	if len(comps) != 2 {
+		err := errors.New("invalid bearer id")
+		log.Error().Err(err).Str("bearer-id", bearerId).Msg(semLogContext)
+		return bearerId, nil, "", err
+	}
+
+	actorId := comps[0]
+	campaignId := comps[1]
+	var actorScope []string
+	if ndx := strings.Index(comps[0], ActorScopeMatrixParamValue); ndx >= 0 {
+		actorScope = strings.Split(comps[0][ndx+len(ActorScopeMatrixParamValue):], ",")
+		actorId = comps[0][:ndx]
+	}
+	return actorId, actorScope, campaignId, nil
 }
 
 func WellFormBearerId(id string) string {
