@@ -1,8 +1,8 @@
 module github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client
 
-go 1.21
+go 1.24
 
-toolchain go1.22.4
+toolchain go1.24.1
 
 require (
 	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.81
