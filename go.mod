@@ -5,12 +5,12 @@ go 1.21
 toolchain go1.22.4
 
 require (
-	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.73
-	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.1.19
-	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.1.19
+	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.81
+	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.1.20
+	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.1.20
 	github.com/google/uuid v1.6.0
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/rs/zerolog v1.33.0
+	github.com/rs/zerolog v1.34.0
 	github.com/stretchr/testify v1.10.0
 	github.com/uber/jaeger-client-go v2.30.0+incompatible
 	github.com/uber/jaeger-lib v2.4.1+incompatible
@@ -20,7 +20,7 @@ require (
 	github.com/PaesslerAG/gval v1.2.2 // indirect
 	github.com/PaesslerAG/jsonpath v0.1.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/go-resty/resty/v2 v2.16.4 // indirect
+	github.com/go-resty/resty/v2 v2.16.5 // indirect
 	github.com/lucasjones/reggen v0.0.0-20200904144131-37ba4fa293bb // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
