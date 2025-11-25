@@ -1,13 +1,18 @@
 package tokensclient_test
 
 import (
+	"net/http"
+
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive/hartracing/filetracer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client/restclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
-	"net/http"
+
+	"io"
+	"os"
+	"testing"
 
 	"github.com/opentracing/opentracing-go"
 	"github.com/rs/zerolog"
@@ -15,9 +20,6 @@ import (
 	"github.com/stretchr/testify/require"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
 	"github.com/uber/jaeger-lib/metrics"
-	"io"
-	"os"
-	"testing"
 )
 
 var cliConfig = tokensclient.Config{
@@ -224,7 +226,7 @@ func executeTestBearerClient(t *testing.T, cli *tokensclient.Client, tokenContex
 	require.NoError(t, err)
 	t.Log(ber)
 
-	resp, err := cli.AddToken2BearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID", "secondary")
+	resp, err := cli.AddToken2BearerInContext(apiRequestCtx, bearerTestCase001.Pkey, bearerTestCase001.TokenContextId, "TOKEN-ID", bearer.RoleSecondary)
 	require.NoError(t, err)
 	t.Log(resp)
 

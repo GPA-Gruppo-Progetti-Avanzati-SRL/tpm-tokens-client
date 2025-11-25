@@ -2,6 +2,7 @@ package campaignclient_test
 
 import (
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/campaignclient"
+	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/bearer"
 	"github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-tokens-client/tokensclient/model/token"
 )
 
@@ -130,7 +131,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 							},
 							ProcessVarDefinitions: []token.ProcessVarDefinition{
@@ -241,7 +242,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 							},
 							ProcessVarDefinitions: []token.ProcessVarDefinition{
@@ -313,7 +314,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 							},
 						},
@@ -329,7 +330,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 							},
 							Rules: []token.Rule{
@@ -404,11 +405,11 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 								{
 									Id:   BearerCF2ReferenceVariable,
-									Role: "secondary",
+									Role: bearer.RoleSecondary,
 								},
 							},
 							ProcessVarDefinitions: []token.ProcessVarDefinition{
@@ -484,11 +485,11 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 								{
 									Id:   BearerCF2ReferenceVariable,
-									Role: "secondary",
+									Role: bearer.RoleSecondary,
 								},
 							},
 							Rules: []token.Rule{
@@ -508,7 +509,7 @@ var campaignTestCase001 = campaignclient.Campaign{
 							Bearers: []token.BearerRef{
 								{
 									Id:   BearerCF1ReferenceVariable,
-									Role: "primary",
+									Role: bearer.RolePrimary,
 								},
 							},
 							Rules: []token.Rule{

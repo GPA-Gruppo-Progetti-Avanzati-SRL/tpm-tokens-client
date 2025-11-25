@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+
 	"github.com/rs/zerolog/log"
 
 	"strings"
@@ -13,6 +14,10 @@ const (
 	MailPropertyName      = "mail"
 	FirstNamePropertyName = "first-name"
 	LastNamePropertyName  = "last-name"
+
+	RolePrimary   = "primary"
+	RoleSecondary = "secondary"
+	RoleAssignee  = "assignee"
 )
 
 type TokenRef struct {
@@ -151,10 +156,10 @@ func (ber *Bearer) AddToken(tokId string, role string) bool {
 	}
 
 	if role == "" {
-		role = "primary"
+		role = RolePrimary
 	}
 
-	if role != "primary" && role != "secondary" {
+	if role != RolePrimary && role != RoleSecondary {
 		log.Error().Str("role", role).Str("token-id", tokId).Msg(semLogContext + " unsupported role")
 	}
 
