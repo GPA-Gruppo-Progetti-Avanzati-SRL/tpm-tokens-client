@@ -20,6 +20,10 @@ const (
 	RoleAssignee  = "assignee"
 )
 
+func RoleIsValid(r string) bool {
+	return r == RolePrimary || r == RoleSecondary || r == RoleAssignee
+}
+
 type TokenRef struct {
 	Id   string `yaml:"id,omitempty" mapstructure:"id,omitempty" json:"id,omitempty"`
 	Role string `yaml:"role,omitempty" mapstructure:"role,omitempty" json:"role,omitempty"`
@@ -159,7 +163,7 @@ func (ber *Bearer) AddToken(tokId string, role string) bool {
 		role = RolePrimary
 	}
 
-	if role != RolePrimary && role != RoleSecondary {
+	if !RoleIsValid(role) {
 		log.Error().Str("role", role).Str("token-id", tokId).Msg(semLogContext + " unsupported role")
 	}
 
