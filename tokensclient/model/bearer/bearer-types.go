@@ -54,6 +54,16 @@ func (ber *Bearer) MustToJSON() []byte {
 	return b
 }
 
+func (ber *Bearer) HasAnyActiveRoleOnTokens() bool {
+	for _, tr := range ber.TokenRefs {
+		if tr.Role == RolePrimary || tr.Role == RoleSecondary {
+			return true
+		}
+	}
+
+	return false
+}
+
 func DeserializeBearer(b []byte) (*Bearer, error) {
 	ctx := Bearer{}
 	err := json.Unmarshal(b, &ctx)
