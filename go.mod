@@ -5,7 +5,7 @@ go 1.24
 toolchain go1.24.1
 
 require (
-	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.89
+	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-common v0.1.90
 	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-archive v0.1.22
 	github.com/GPA-Gruppo-Progetti-Avanzati-SRL/tpm-http-client v0.1.22
 	github.com/google/uuid v1.6.0
